@@ -1,0 +1,2555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PashuRaksha AI - Intelligent Animal Rescue & Adoption Platform</title>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0d5c3a;
+            --primary-dark: #073e26;
+            --primary-light: #10b981;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --info: #3b82f6;
+            --info-bg: #eff6ff;
+            
+            --bg-main: #f4f7f5;
+            --bg-card: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 20px 30px -10px rgba(13, 92, 58, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6, .logo {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ANNOUNCEMENT BAR */
+        .announcement-bar {
+            background: linear-gradient(90deg, #073e26, #0d5c3a, #10b981);
+            color: white;
+            padding: 8px 5%;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .announcement-bar a {
+            color: #a7f3d0;
+            text-decoration: underline;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            height: 76px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--primary-light);
+            background: #ecfdf5;
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .logo span.badge-ai {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li {
+            font-size: 15px;
+            font-weight: 600;
+            color: #4b5563;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+        }
+
+        .nav-links li:hover, .nav-links li.active {
+            color: var(--primary);
+            background: #f0fdf4;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-emergency-nav {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+            transition: var(--transition);
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .btn-emergency-nav:hover {
+            transform: translateY(-2px);
+            background: #dc2626;
+        }
+
+        .menu-btn {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* MAIN CONTENT & PAGES */
+        main {
+            width: 90%;
+            max-width: 1280px;
+            margin: auto;
+            min-height: calc(100vh - 300px);
+        }
+
+        .page {
+            display: none;
+            padding: 30px 0 60px;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO SECTION */
+        .hero-banner {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            align-items: center;
+            background: linear-gradient(135deg, #073e26 0%, #0d5c3a 50%, #116943 100%);
+            border-radius: var(--radius-lg);
+            padding: 60px;
+            color: white;
+            margin-top: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-content h1 {
+            font-size: 46px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-content h1 span {
+            color: #6ee7b7;
+            background: linear-gradient(120deg, #a7f3d0, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: #d1fae5;
+            margin-bottom: 32px;
+            max-width: 580px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            transition: var(--transition);
+        }
+
+        .btn-hero-primary:hover {
+            background: #059669;
+            transform: translateY(-3px);
+        }
+
+        .btn-hero-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        /* HERO IMAGE GALLERY STACK */
+        .hero-image-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-main-img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .floating-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--text-main);
+            padding: 12px 18px;
+            border-radius: 14px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-card-1 {
+            bottom: -20px;
+            left: -20px;
+        }
+
+        .floating-card-2 {
+            top: 20px;
+            right: -20px;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating-card img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .floating-card-text strong {
+            display: block;
+            font-size: 14px;
+            color: var(--primary-dark);
+        }
+
+        .floating-card-text span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* INTERACTIVE QUICK WIDGETS SECTION */
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-top: 35px;
+        }
+
+        .widget-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .widget-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .widget-title i {
+            color: var(--primary-light);
+        }
+
+        /* INTERACTIVE DASHBOARD STATS */
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0 20px;
+        }
+
+        .city-filter {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: white;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-light);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--success-bg);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .stat-card p {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            color: var(--success);
+            font-weight: 600;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* SECTION TITLES */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin: 45px 0 24px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .btn-view-all {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-view-all:hover {
+            color: var(--primary-dark);
+            gap: 10px;
+        }
+
+        /* CARDS GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-img-wrapper img {
+            transform: scale(1.06);
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .card-info {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+            width: fit-content;
+        }
+
+        .badge-high { background: var(--danger-bg); color: var(--danger); }
+        .badge-medium { background: var(--warning-bg); color: var(--warning); }
+        .badge-low { background: var(--success-bg); color: var(--success); }
+        .badge-completed { background: var(--info-bg); color: var(--info); }
+
+        .card-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-card-action {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-card-action:hover {
+            background: var(--primary-dark);
+        }
+
+        /* TRANSFORMATION BEFORE/AFTER SLIDER SECTION */
+        .story-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .before-after-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            position: relative;
+        }
+
+        .ba-box {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            height: 180px;
+        }
+
+        .ba-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ba-label {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* AI SCANNER DEMO WIDGET */
+        .ai-scanner-box {
+            background: linear-gradient(135deg, #111827, #1f2937);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 28px;
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .ai-scanner-text h3 {
+            font-size: 26px;
+            color: #6ee7b7;
+            margin-bottom: 12px;
+        }
+
+        .ai-scanner-demo {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ai-scanner-demo:hover {
+            border-color: var(--primary-light);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        /* FORMS */
+        .form-container {
+            background: white;
+            padding: 36px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            max-width: 750px;
+            margin: auto;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+            background: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(13, 92, 58, 0.1);
+        }
+
+        textarea {
+            height: 110px;
+            resize: vertical;
+        }
+
+        .file-upload-box {
+            border: 2px dashed #cbd5e1;
+            padding: 24px;
+            text-align: center;
+            border-radius: 12px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload-box:hover {
+            border-color: var(--primary);
+            background: #f0fdf4;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--danger);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            width: 100%;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(13, 92, 58, 0.25);
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* SHELTER CARD */
+        .shelter-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .shelter-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .capacity-bar {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 14px 0;
+            overflow: hidden;
+        }
+
+        .capacity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 10px;
+        }
+
+        /* PROFILE CARD */
+        .profile-card {
+            background: white;
+            max-width: 650px;
+            margin: auto;
+            padding: 36px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .profile-avatar-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius-md);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary-dark);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* FOOTER */
+        footer {
+            margin-top: 80px;
+            background: #073e26;
+            color: white;
+            padding: 60px 5% 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #a7f3d0;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #d1fae5;
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 24px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 992px) {
+            .hero-banner {
+                grid-template-columns: 1fr;
+                padding: 40px 30px;
+            }
+            .hero-image-wrapper {
+                margin-top: 30px;
+            }
+            .interactive-grid, .ai-scanner-box, .story-card {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 76px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: var(--shadow-md);
+            }
+            .nav-links.show {
+                display: flex;
+            }
+            .menu-btn {
+                display: block;
+            }
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        /* PashuRaksha role-based login and rescue-center dashboard */
+        body:not(.authenticated) .navbar, body:not(.authenticated) main, body:not(.authenticated) footer { display: none !important; }
+        body.ngo-view .navbar, body.ngo-view main, body.ngo-view footer { display: none !important; }
+        .auth-screen[hidden], .ngo-dashboard[hidden], .auth-panel [hidden], .ngo-tab[hidden] { display:none !important; }
+        .auth-screen { min-height: 100vh; display:flex; align-items:center; justify-content:center; padding:32px 18px; background:var(--bg, #f4f9f6); }
+        .auth-wrap { width:min(980px,100%); display:grid; grid-template-columns:1fr 1fr; background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 18px 55px rgba(7,62,38,.13); border:1px solid rgba(13,92,58,.10); }
+        .auth-intro { background:linear-gradient(145deg,var(--primary-dark,#073e26),var(--primary,#0d5c3a)); color:#fff; padding:46px 38px; display:flex; flex-direction:column; justify-content:center; }
+        .auth-brand { font-family:'Outfit',sans-serif; font-size:28px; font-weight:800; margin-bottom:24px; }
+        .auth-brand i { margin-right:9px; color:#6ee7b7; }
+        .auth-intro h1 { font-family:'Outfit',sans-serif; font-size:clamp(27px,3vw,38px); line-height:1.15; margin-bottom:15px; }
+        .auth-intro p { color:#d9f5e6; line-height:1.7; }
+        .auth-perks { margin-top:25px; display:grid; gap:13px; }
+        .auth-perks span { display:flex; gap:10px; align-items:center; color:#f0fff6; }
+        .auth-perks i { color:#6ee7b7; }
+        .auth-panel { padding:38px; }
+        .auth-panel h2 { font-family:'Outfit',sans-serif; color:var(--primary-dark,#073e26); font-size:27px; margin-bottom:8px; }
+        .auth-subtitle { color:#64748b; margin-bottom:24px; line-height:1.55; }
+        .auth-role-list { display:grid; gap:13px; margin-top:22px; }
+        .auth-role { border:1px solid #dbe7df; background:#fff; border-radius:14px; padding:17px; display:flex; align-items:center; gap:14px; text-align:left; cursor:pointer; width:100%; transition:.2s; color:#183b2a; }
+        .auth-role:hover { border-color:var(--primary-light,#10b981); transform:translateY(-1px); box-shadow:0 7px 18px rgba(13,92,58,.08); }
+        .auth-role-icon { width:48px; height:48px; flex-shrink:0; display:grid; place-items:center; border-radius:12px; background:#e7f7ed; color:var(--primary,#0d5c3a); font-size:20px; }
+        .auth-role strong { display:block; margin-bottom:4px; font-family:'Outfit',sans-serif; font-size:16px; }
+        .auth-role small { color:#64748b; line-height:1.4; }
+        .auth-field { margin:16px 0; }
+        .auth-field label { display:block; font-size:14px; font-weight:700; color:#334155; margin-bottom:7px; }
+        .auth-field input, .auth-field select { width:100%; padding:12px 13px; border:1px solid #cbd5e1; border-radius:10px; font:inherit; background:#fff; color:#1e293b; outline:none; }
+        .auth-field input:focus, .auth-field select:focus { border-color:var(--primary-light,#10b981); box-shadow:0 0 0 3px rgba(16,185,129,.12); }
+        .auth-primary { border:0; width:100%; padding:13px 16px; border-radius:10px; background:var(--primary,#0d5c3a); color:#fff; font:inherit; font-weight:700; cursor:pointer; margin-top:8px; }
+        .auth-primary:hover { background:var(--primary-dark,#073e26); }
+        .auth-back { border:0; background:none; color:var(--primary,#0d5c3a); cursor:pointer; padding:0; margin-bottom:18px; font:inherit; font-weight:700; }
+        .auth-switch { color:#64748b; font-size:14px; text-align:center; margin-top:18px; }
+        .auth-switch button { border:0; background:none; color:var(--primary,#0d5c3a); font:inherit; font-weight:700; cursor:pointer; }
+        .auth-error { color:#b91c1c; background:#fef2f2; border-radius:9px; padding:10px 12px; margin:12px 0; font-size:14px; display:none; }
+        .auth-note { color:#64748b; font-size:12px; line-height:1.5; margin-top:14px; }
+        .ngo-dashboard { min-height:100vh; background:#f5f9f6; color:#193528; }
+        .ngo-topbar { background:#fff; border-bottom:1px solid #e1ebe4; padding:17px clamp(18px,4vw,50px); display:flex; justify-content:space-between; align-items:center; gap:15px; }
+        .ngo-topbrand { font:800 23px 'Outfit',sans-serif; color:var(--primary,#0d5c3a); }
+        .ngo-topbrand i { margin-right:8px; }
+        .ngo-identity { display:flex; align-items:center; gap:12px; }
+        .ngo-identity small { display:block; color:#64748b; margin-top:3px; }
+        .ngo-logout { border:1px solid #d3e3d8; color:var(--primary,#0d5c3a); border-radius:9px; padding:9px 13px; background:#fff; cursor:pointer; font:inherit; font-weight:700; }
+        .ngo-layout { max-width:1280px; margin:0 auto; padding:28px 22px 50px; display:grid; grid-template-columns:230px minmax(0,1fr); gap:24px; }
+        .ngo-sidebar { background:#fff; border:1px solid #e1ebe4; border-radius:16px; padding:13px; align-self:start; }
+        .ngo-nav { width:100%; display:flex; gap:11px; align-items:center; text-align:left; border:0; background:transparent; color:#52645a; border-radius:10px; padding:13px 12px; margin:3px 0; cursor:pointer; font:inherit; font-weight:600; }
+        .ngo-nav.active,.ngo-nav:hover { background:#e9f6ed; color:var(--primary,#0d5c3a); }
+        .ngo-main h1 { font:800 29px 'Outfit',sans-serif; margin-bottom:7px; color:#183b2a; }
+        .ngo-lead { color:#6b7b70; margin-bottom:22px; line-height:1.6; }
+        .ngo-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:23px; }
+        .ngo-stat { background:#fff; border:1px solid #e1ebe4; border-radius:14px; padding:18px; }
+        .ngo-stat span { display:block; color:#6b7b70; font-size:13px; margin-bottom:8px; }
+        .ngo-stat strong { display:block; font:800 27px 'Outfit',sans-serif; color:var(--primary,#0d5c3a); }
+        .ngo-section { background:#fff; border:1px solid #e1ebe4; border-radius:16px; padding:20px; margin-bottom:18px; }
+        .ngo-section-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
+        .ngo-section h2 { font:700 20px 'Outfit',sans-serif; }
+        .ngo-request { border:1px solid #e5ece7; border-radius:12px; padding:16px; margin:11px 0; }
+        .ngo-request-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+        .ngo-request h3 { font:700 17px 'Outfit',sans-serif; margin-bottom:5px; }
+        .ngo-muted { color:#718078; font-size:13px; line-height:1.6; }
+        .ngo-tag { display:inline-block; padding:5px 9px; border-radius:30px; font-size:11px; font-weight:800; background:#fff4d8; color:#96620a; }
+        .ngo-tag.urgent { background:#fee2e2; color:#b91c1c; }
+        .ngo-tag.done { background:#dcfce7; color:#166534; }
+        .ngo-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:13px; }
+        .ngo-action { padding:8px 12px; border-radius:8px; border:1px solid #cbded1; background:#fff; color:#22543a; cursor:pointer; font:inherit; font-weight:700; font-size:13px; }
+        .ngo-action.accept { background:var(--primary,#0d5c3a); color:#fff; border-color:var(--primary,#0d5c3a); }
+        .ngo-action.reject { color:#b91c1c; border-color:#fecaca; }
+        .ngo-progress { height:9px; background:#e6eee8; border-radius:20px; overflow:hidden; margin:12px 0 7px; }
+        .ngo-progress span { display:block; height:100%; border-radius:20px; background:var(--primary-light,#10b981); }
+        .ngo-profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+        .ngo-empty { color:#718078; text-align:center; padding:28px 12px; }
+        @media(max-width:760px) { .auth-wrap { grid-template-columns:1fr; } .auth-intro { padding:28px; } .auth-intro h1 { font-size:29px; } .auth-panel { padding:27px; } .ngo-layout { grid-template-columns:1fr; padding:18px 13px 35px; } .ngo-sidebar { display:grid; grid-template-columns:1fr 1fr; } .ngo-stats { grid-template-columns:1fr; } .ngo-profile-grid { grid-template-columns:1fr; } .ngo-topbar { align-items:flex-start; } .ngo-identity { flex-wrap:wrap; justify-content:flex-end; } }
+
+    </style>
+</head>
+<body>
+
+<!-- ROLE SELECTION + LOGIN -->
+<section id="authScreen" class="auth-screen">
+  <div class="auth-wrap">
+    <div class="auth-intro">
+      <div class="auth-brand"><i class="fa-solid fa-paw"></i>PashuRaksha</div>
+      <h1>Every act of kindness can save a life.</h1>
+      <p>A community network connecting people who spot animals in need with the rescue teams ready to help.</p>
+      <div class="auth-perks"><span><i class="fa-solid fa-circle-check"></i> Report an injured or abandoned animal</span><span><i class="fa-solid fa-circle-check"></i> Connect with rescue organizations</span><span><i class="fa-solid fa-circle-check"></i> Follow rescue case progress</span></div>
+    </div>
+    <div class="auth-panel">
+      <div id="rolePicker">
+        <h2>Welcome to PashuRaksha</h2><p class="auth-subtitle">Choose how you want to continue.</p>
+        <div class="auth-role-list">
+          <button class="auth-role" onclick="chooseAuthRole('helper','login')"><span class="auth-role-icon"><i class="fa-solid fa-hand-holding-heart"></i></span><span><strong>I'm here to help an animal</strong><small>Report animals, request rescue, and track cases.</small></span></button>
+          <button class="auth-role" onclick="chooseAuthRole('ngo','login')"><span class="auth-role-icon"><i class="fa-solid fa-house-medical"></i></span><span><strong>I'm an NGO or rescue center member</strong><small>Manage incoming rescue requests and shelter capacity.</small></span></button>
+        </div>
+        <p class="auth-note">Your account type controls which areas of PashuRaksha you can access.</p>
+      </div>
+      <div id="authFormWrap" hidden>
+        <button class="auth-back" onclick="backToRoles()"><i class="fa-solid fa-arrow-left"></i> Choose account type</button>
+        <h2 id="authTitle">Helper Login</h2><p class="auth-subtitle" id="authSubtitle">Sign in to continue helping animals.</p>
+        <div id="authError" class="auth-error" role="alert"></div>
+        <form id="authForm">
+          <div id="authNameWrap" class="auth-field" hidden><label for="authName">Full name / Organization name</label><input id="authName" autocomplete="name" placeholder="Enter your name"></div>
+          <div class="auth-field"><label for="authPhone">Mobile number</label><input id="authPhone" type="tel" inputmode="tel" autocomplete="tel" required minlength="10" placeholder="Enter mobile number"></div>
+          <div id="authOrgFields" hidden>
+            <div class="auth-field"><label for="authLocation">Center location</label><input id="authLocation" placeholder="City / area"></div>
+            <div class="auth-field"><label for="authCapacity">Animal capacity</label><input id="authCapacity" type="number" min="0" value="20" placeholder="Total animals your center can accommodate"></div>
+          </div>
+          <div class="auth-field"><label for="authPassword">Password</label><div style="display:flex;gap:8px"><input id="authPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="At least 6 characters" style="flex:1;min-width:0"><button type="button" class="ngo-action" onclick="togglePasswordVisibility()" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button></div><div style="text-align:right;margin-top:8px"><button type="button" id="forgotPasswordBtn" onclick="showForgotPasswordInfo()" style="border:0;background:none;color:var(--primary,#0d5c3a);font:inherit;font-size:13px;cursor:pointer">Forgot password?</button></div></div>
+          <button class="auth-primary" id="authSubmit" type="submit">Login</button>
+        </form>
+        <p class="auth-switch"><span id="authSwitchText">New to PashuRaksha?</span> <button id="authSwitchBtn" onclick="toggleAuthMode()">Create account</button></p>
+        <p class="auth-note">Demo note: mobile-number recovery via SMS/OTP needs an SMS provider and will be added after you choose one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NGO / RESCUE CENTER DASHBOARD -->
+<section id="ngoDashboard" class="ngo-dashboard" hidden>
+  <header class="ngo-topbar"><div class="ngo-topbrand"><i class="fa-solid fa-paw"></i>PashuRaksha</div><div class="ngo-identity"><div><strong id="ngoHeaderName">Rescue Center</strong><small>Organization dashboard</small></div><button class="ngo-logout" onclick="logoutUser()" title="Log out and return to account selection"><i class="fa-solid fa-right-from-bracket"></i> Switch Account</button></div></header>
+  <div class="ngo-layout">
+    <aside class="ngo-sidebar">
+      <button class="ngo-nav active" data-ngotab="requests" onclick="showNgoTab('requests')"><i class="fa-solid fa-inbox"></i> Rescue Requests</button>
+      <button class="ngo-nav" data-ngotab="profile" onclick="showNgoTab('profile')"><i class="fa-solid fa-user"></i> Center Profile</button>
+      <button class="ngo-nav" data-ngotab="animals" onclick="showNgoTab('animals')"><i class="fa-solid fa-heart"></i> Animals Rescued</button>
+      <button class="ngo-nav" data-ngotab="capacity" onclick="showNgoTab('capacity')"><i class="fa-solid fa-house"></i> Shelter Capacity</button>
+    </aside>
+    <div class="ngo-main">
+      <div id="ngoTabRequests" class="ngo-tab">
+        <h1>Rescue Requests</h1><p class="ngo-lead">Review reports submitted by community members and decide which cases your center can take.</p>
+        <div class="ngo-stats"><div class="ngo-stat"><span>Incoming / pending</span><strong id="ngoPendingCount">0</strong></div><div class="ngo-stat"><span>Accepted cases</span><strong id="ngoAcceptedCount">0</strong></div><div class="ngo-stat"><span>Animals rescued</span><strong id="ngoRescuedCount">0</strong></div></div>
+        <div class="ngo-section"><div class="ngo-section-head"><h2>Incoming cases</h2><button class="ngo-action" onclick="loadNgoDashboard()"><i class="fa-solid fa-rotate"></i> Refresh</button></div><div id="ngoRequestsList"><div class="ngo-empty">Loading rescue requests…</div></div></div>
+      </div>
+      <div id="ngoTabProfile" class="ngo-tab" hidden><h1>Center Profile</h1><p class="ngo-lead">Keep your rescue center's contact and location details up to date.</p><div class="ngo-section"><form id="ngoProfileForm"><div class="ngo-profile-grid"><div class="auth-field"><label for="ngoProfileName">Center / organization name</label><input id="ngoProfileName" required></div><div class="auth-field"><label for="ngoProfilePhone">Mobile number</label><input id="ngoProfilePhone" type="tel" required></div><div class="auth-field"><label for="ngoProfileLocation">Location</label><input id="ngoProfileLocation"></div><div class="auth-field"><label for="ngoProfileAddress">Full address</label><input id="ngoProfileAddress"></div><div class="auth-field"><label for="ngoProfileAnimals">Animals rescued (total)</label><input id="ngoProfileAnimals" type="number" min="0"></div><div class="auth-field"><label for="ngoProfileCapacity">Total animal capacity</label><input id="ngoProfileCapacity" type="number" min="0"></div></div><button class="auth-primary" type="submit">Save profile</button></form></div></div>
+      <div id="ngoTabAnimals" class="ngo-tab" hidden><h1>Animals Rescued</h1><p class="ngo-lead">A summary of your center's rescue work.</p><div class="ngo-section"><div class="ngo-stat"><span>Total animals rescued (as entered in profile)</span><strong id="ngoAnimalsTotal">0</strong></div><p class="ngo-muted" style="margin-top:12px">Update this number in Center Profile. Accepted cases are tracked separately in Rescue Requests.</p></div></div>
+      <div id="ngoTabCapacity" class="ngo-tab" hidden><h1>Shelter Capacity</h1><p class="ngo-lead">Keep your available animal-care space visible to the rescue network.</p><div class="ngo-section"><div class="ngo-stats"><div class="ngo-stat"><span>Animals currently housed</span><strong id="ngoOccupied">0</strong></div><div class="ngo-stat"><span>Total capacity</span><strong id="ngoCapacityTotal">0</strong></div><div class="ngo-stat"><span>Available spaces</span><strong id="ngoAvailable">0</strong></div></div><div class="ngo-progress"><span id="ngoCapacityBar" style="width:0%"></span></div><p class="ngo-muted" id="ngoCapacityCaption">Update your capacity in Center Profile.</p><button class="ngo-action" onclick="showNgoTab('profile')">Edit capacity</button></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- NAVIGATION -->
+<nav class="navbar">
+    <div class="logo" onclick="showPage('home')">
+        <i class="fa-solid fa-paw"></i> PashuRaksha
+    </div>
+
+    <div class="menu-btn" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+        <li id="nav-home" class="active" onclick="showPage('home')">Home</li>
+        <li id="nav-report" onclick="showPage('report')">Report Animal</li>
+        <li id="nav-rescue" onclick="showPage('rescue')">Rescue Cases</li>
+        <li id="nav-shelters" onclick="showPage('shelters')">Shelters</li>
+        <li id="nav-adoption" onclick="showPage('adoption')">Adoption</li>
+        <li id="nav-profile" onclick="showPage('profile')">Profile <span id="profileNotifBadge" style="display:none;background:#10b981;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:4px;">0</span></li>
+        <li id="nav-switch-account" onclick="logoutUser()" title="Log out and return to account selection"><i class="fa-solid fa-right-from-bracket"></i> Switch Account</li>
+    </ul>
+</nav>
+
+<main>
+
+    <!-- HOME PAGE -->
+    <section id="home" class="page active">
+
+        <!-- HERO SECTION -->
+        <div class="hero-banner">
+            <div class="hero-content">
+                <h1>Help Every Stray Animal Find <span>Care & Protection</span></h1>
+                <p>PashuRaksha connects citizens, NGOs, and vets for instant stray animal rescues.</p>
+                <div class="hero-cta-group">
+                    <button class="btn-hero-primary" onclick="showPage('report')">
+                        <i class="fa-solid fa-camera"></i> Report an Animal Now
+                    </button>
+                    <button class="btn-hero-secondary" onclick="showPage('adoption')">
+                        <i class="fa-solid fa-heart"></i> Adopt Rescued Pet
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80" alt="Rescued Dogs" class="hero-main-img">
+            </div>
+        </div>
+
+        <!-- AI VISION DEMO FEATURE -->
+        <div class="ai-scanner-box">
+            <div class="ai-scanner-text">
+                <h3>Animal Condition Scanner</h3>
+                <p style="color: #cbd5e1; font-size: 15px; margin-bottom: 20px;">Take a live photo or upload an image of a stray animal. PashuRaksha AI automatically detects species, assesses injury severity, and tags nearby shelter capacity.</p>
+                <div style="display: flex; gap: 15px; font-size: 14px; color: #a7f3d0;">
+                    <span><i class="fa-solid fa-check-circle"></i> Live Camera Capture</span>
+                    <span><i class="fa-solid fa-check-circle"></i> Instant AI Severity Scan</span>
+                </div>
+            </div>
+            <div class="ai-scanner-demo" onclick="triggerAiCameraScan()" style="cursor: pointer;">
+                <input type="file" id="aiCameraInput" accept="image/*" capture="environment" style="display: none;" onchange="handleAiCameraScan(this)">
+                <div id="aiCameraInitialView">
+                    <i class="fa-solid fa-camera" style="font-size: 38px; color: #6ee7b7; margin-bottom: 12px;"></i>
+                    <h4 style="color: white; font-size: 16px; margin-bottom: 6px;">📷 Open Camera & Scan Animal</h4>
+                    <p style="color: #9ca3af; font-size: 13px;">Click to capture photo & analyze animal condition</p>
+                </div>
+                <div id="aiScanPreviewBox" style="display: none; text-align: center;">
+                    <img id="aiScanPreviewImg" src="" style="max-height: 120px; border-radius: 10px; border: 2px solid #6ee7b7; margin-bottom: 10px; object-fit: cover;">
+                </div>
+                <div id="aiScanOutput" style="display: none; margin-top: 12px; text-align: left; background: rgba(0,0,0,0.6); padding: 14px; border-radius: 8px; font-size: 13px; color: #6ee7b7; border: 1px solid rgba(110,231,183,0.3);"></div>
+            </div>
+        </div>
+
+        <!-- FEATURED URGENT RESCUE CASES -->
+        <div class="section-header">
+            <div class="section-title">
+                <h2>Before You Report</h2>
+                <p>Animals requiring immediate attention or volunteer dispatch</p>
+            </div>
+            <a class="btn-view-all" onclick="showPage('rescue')">View All Cases <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <div class="cards-grid">
+
+            <!-- High Priority Case - Spinal Injury -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=800&q=80" alt="Injured Dog">
+                </div>
+                <div class="card-content">
+                    <h3>Severe Spinal Trauma & Fracture</h3>
+                    <div class="card-info"><i class="fa-solid fa-notes-medical" style="color:#ef4444;"></i> Hit-and-run trauma, rear paralysis</div>
+                    <div class="card-info"><i class="fa-solid fa-truck-medical"></i> Emergency Ambulance Dispatched</div>
+                    <span class="badge badge-high"><i class="fa-solid fa-triangle-exclamation"></i> HIGH PRIORITY - CRITICAL</span>
+                </div>
+            </div>
+
+            <!-- Medium Priority Case -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80" alt="Weak Dog">
+                </div>
+                <div class="card-content">
+                    <h3>Viral Parvovirus & Dehydration</h3>
+                    <div class="card-info"><i class="fa-solid fa-virus" style="color:#f59e0b;"></i> High fever, acute weakness & fluid loss</div>
+                    <div class="card-info"><i class="fa-solid fa-user-check"></i> Vet Isolation Ward Assigned</div>
+                    <span class="badge badge-medium"><i class="fa-solid fa-circle-exclamation"></i> MEDIUM PRIORITY - INFECTIOUS</span>
+                </div>
+            </div>
+
+            <!-- Low Priority Case - Stray Cow -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=800&q=80" alt="Stray Cow">
+                </div>
+                <div class="card-content">
+                    <h3>Stray Mother Cow Care & Gaushala Relocation</h3>
+                    <div class="card-info"><i class="fa-solid fa-cow" style="color:#10b981;"></i> Safe Stray Cow, needs nutrition & sanctuary space</div>
+                    <div class="card-info"><i class="fa-solid fa-shield-halved"></i> Gaushala Space Reserved</div>
+                    <span class="badge badge-low"><i class="fa-solid fa-shield-halved"></i> LOW PRIORITY - RELOCATION</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TRANSFORMATION / RECOVERY STORIES -->
+        <div class="section-header" style="margin-top: 60px;">
+            <div class="section-title">
+                <h2>Transformation Stories</h2>
+                <p>From street distress to safe & happy lives</p>
+            </div>
+        </div>
+
+        <div class="story-card">
+            <div class="before-after-container">
+                <div class="ba-box">
+                    <img src="https://images.unsplash.com/photo-1535930891776-0c2dfb7fda1a?auto=format&fit=crop&w=800&q=80" alt="Tommy Before Rescue">
+                    <span class="ba-label" style="background:#ef4444;">CRITICALLY ILL ON STREET</span>
+                </div>
+                <div class="ba-box">
+                    <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80" alt="Tommy Recovered">
+                    <span class="ba-label" style="background:#10b981;">FULLY RECOVERED & ADOPTED</span>
+                </div>
+            </div>
+            <div>
+                <span class="badge badge-completed" style="margin-bottom: 12px;"><i class="fa-solid fa-heart"></i> REHABILITATED & ADOPTED</span>
+                <h3 style="font-size: 22px; margin-bottom: 10px; color: var(--primary-dark);">Tommy's Inspiring Journey: From Collapse to Care</h3>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px; line-height: 1.6;">Tommy was found collapsed on a busy street corner, critically ill with severe dehydration, high fever, and advanced skin mange. He was too weak to stand when caring citizens noticed him and submitted an emergency rescue alert. Within 20 minutes, a mobile vet team arrived, administered IV fluids, and transferred him to intensive care. After 6 weeks of dedicated medical treatment and nourishing care, Tommy made a complete recovery. Today, he thrives happily with his adoptive family!</p>
+                <div style="font-size: 13px; font-weight: 700; color: var(--primary);"><i class="fa-solid fa-hands-holding-child"></i> Rescued & Rehabilitated by Community Rescue Volunteers</div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- REPORT ANIMAL PAGE -->
+    <section id="report" class="page">
+
+        <div style="text-align: center; max-width: 600px; margin: 0 auto 30px;">
+            <h2 style="font-size: 32px; font-weight: 800; color: var(--primary-dark);">Report a Stray Animal</h2>
+            <p style="color: var(--text-muted);">Fill in the details below. Our PashuRaksha AI model will prioritize emergency dispatches automatically.</p>
+        </div>
+
+        <div class="form-container">
+
+            <form id="reportForm">
+
+                <div class="form-group">
+                    <label>Animal Photo (Required)</label>
+                    <div class="file-upload-box" onclick="if(event.target.id !== 'photoInput') document.getElementById('photoInput').click()">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 32px; color: var(--primary); margin-bottom: 10px;"></i>
+                        <p style="font-weight: 600; color: var(--text-main);">Click to Upload Photo or Drag & Drop</p>
+                        <p style="font-size: 12px; color: var(--text-muted);">PNG, JPG, WEBP up to 10MB</p>
+                        <input type="file" id="photoInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" style="display: none;" onclick="event.stopPropagation()" onchange="previewUpload(this)">
+                    </div>
+                    <div id="filePreviewName" style="margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 600;"></div>
+                    <img id="filePreviewImage" alt="Selected animal preview" style="display:none; max-width:100%; max-height:260px; object-fit:contain; margin-top:12px; border-radius:10px;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label>Animal Species</label>
+                        <select required id="reportType">
+                            <option value="">Select Species</option>
+                            <option>Dog</option>
+                            <option>Cat</option>
+                            <option>Cow / Cattle</option>
+                            <option>Buffalo</option>
+                            <option>Goat / Sheep</option>
+                            <option>Bird</option>
+                            <option>Other Animal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Condition & Health</label>
+                        <select required id="reportCondition">
+                            <option value="">Select Condition</option>
+                            <option>Critical - Severely Injured</option>
+                            <option>Injured / Bleeding</option>
+                            <option>Weak / Malnourished</option>
+                            <option>Abandoned Newborn Puppies/Kittens</option>
+                            <option>Healthy (Relocation / Shelter Request)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Exact Location & Landmark</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="reportLocation" placeholder="Enter street address, colony name, or use GPS..." required style="flex:1;">
+                        <button type="button" class="btn-card-action" onclick="useCurrentLocation()" style="width: auto; white-space: nowrap; background: #3b82f6;">
+                            Use GPS
+                        </button>
+                    </div>
+                    <input type="hidden" id="reportLatitude">
+                    <input type="hidden" id="reportLongitude">
+                    <p id="gpsStatus" style="font-size:12px; color:var(--text-muted); margin-top:6px;">GPS coordinates are optional; allow location access when prompted.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Description & Details</label>
+                    <textarea id="reportDescription" placeholder="Describe any visible wounds, exact spot where animal is resting, or helpful directions..."></textarea>
+                </div>
+
+                <div class="form-group" style="background: #fef2f2; padding: 16px; border-radius: 10px; border: 1px solid #fecaca;">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="emergencyCheck">
+                        <span style="font-weight: 700; color: var(--danger);">Mark as Immediate Life-Threatening Emergency</span>
+                    </label>
+                </div>
+
+                <button class="btn-submit" type="submit">
+                    Submit Animal Rescue Report
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+    <!-- RESCUE CASES PAGE -->
+    <section id="rescue" class="page">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>Active & Past Rescue Cases</h2>
+                <p>Track live dispatches, rescue status, and volunteer assignments</p>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <!-- Rescue Card 1: High Priority (Severe Trauma) -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=800&q=80" alt="Dog">
+                </div>
+                <div class="card-content">
+                    <h3>Severe Spinal Trauma & Fracture</h3>
+                    <div class="card-info"><i class="fa-solid fa-notes-medical" style="color:#ef4444;"></i> Hit-and-run trauma, rear paralysis & blood loss</div>
+                    <div class="card-info"><i class="fa-solid fa-clock"></i> Reported 20m ago • Emergency Ambulance Dispatched</div>
+                    <span class="badge badge-high"><i class="fa-solid fa-bolt"></i> HIGH PRIORITY - CRITICAL</span>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openCaseModal('Severe Spinal Trauma', 'Critical', 'High Priority', 'Rescue Unit #3 En-route to ICU')">View Rescue Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rescue Card 3: Medium Priority (Viral Infection) -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80" alt="Dog">
+                </div>
+                <div class="card-content">
+                    <h3>Canine Parvovirus & Severe Dehydration</h3>
+                    <div class="card-info"><i class="fa-solid fa-virus" style="color:#f59e0b;"></i> Viral fever, lethargy, acute electrolyte loss</div>
+                    <div class="card-info"><i class="fa-solid fa-clock"></i> Reported 1h ago • IV Drip Isolation Ward</div>
+                    <span class="badge badge-medium"><i class="fa-solid fa-circle-exclamation"></i> MEDIUM PRIORITY - INFECTIOUS</span>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openCaseModal('Viral Parvovirus Case', 'Infectious', 'Medium Priority', 'In Treatment at Isolation Ward')">View Rescue Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rescue Card 4: Medium Priority (Skin Disease / Mange) -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?auto=format&fit=crop&w=800&q=80" alt="Puppy">
+                </div>
+                <div class="card-content">
+                    <h3>Advanced Demodectic Mange & Dermatitis</h3>
+                    <div class="card-info"><i class="fa-solid fa-notes-medical" style="color:#f59e0b;"></i> Widespread hair loss & secondary fungal skin infection</div>
+                    <div class="card-info"><i class="fa-solid fa-clock"></i> Reported 2h ago • Medicated Treatment Scheduled</div>
+                    <span class="badge badge-medium"><i class="fa-solid fa-user-check"></i> MEDIUM PRIORITY - TREATMENT</span>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openCaseModal('Demodectic Mange Case', 'Treatment', 'Medium Priority', 'Volunteer Assigned')">View Rescue Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rescue Card 5: Low Priority (Stray Cow Care) -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=800&q=80" alt="Stray Cow">
+                </div>
+                <div class="card-content">
+                    <h3>Stray Mother Cow Care & Gaushala Relocation</h3>
+                    <div class="card-info"><i class="fa-solid fa-cow" style="color:#10b981;"></i> Safe stray cow needing nutrition & gaushala sanctuary space</div>
+                    <div class="card-info"><i class="fa-solid fa-clock"></i> Reported 4h ago • Space Reserved</div>
+                    <span class="badge badge-low"><i class="fa-solid fa-shield-halved"></i> LOW PRIORITY - RELOCATION</span>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openCaseModal('Stray Cow Care', 'Stable', 'Low Priority', 'Gaushala Space Reserved')">View Rescue Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rescue Card 6: Low Priority (Routine Vaccination) -->
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=800&q=80" alt="Cat">
+                </div>
+                <div class="card-content">
+                    <h3>Routine Anti-Rabies Vaccination & Flea Care</h3>
+                    <div class="card-info"><i class="fa-solid fa-syringe" style="color:#10b981;"></i> Healthy community stray scheduled for annual booster vaccine</div>
+                    <div class="card-info"><i class="fa-solid fa-clock"></i> Scheduled • Routine Mobile Clinic</div>
+                    <span class="badge badge-completed"><i class="fa-solid fa-circle-check"></i> LOW PRIORITY - VACCINATION</span>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openCaseModal('Routine Vaccination', 'Completed', 'Low Priority', 'Vaccinated & Tagged')">View Rescue Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHELTERS PAGE -->
+    <section id="shelters" class="page">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>Partner Shelters & Gaushalas</h2>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+
+            <div class="shelter-card">
+                <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 14px;">
+                    <img src="https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?auto=format&fit=crop&w=200&q=80" alt="Udayan Care NGO" onclick="openOrgModal(1)" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 2px solid var(--primary-light); cursor: pointer;">
+                    <div>
+                        <h3 onclick="openOrgModal(1)" style="font-size: 19px; color: var(--primary-dark); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(0,0,0,0.15);">Udayan Care NGO</h3>
+                        <p style="color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-location-dot"></i> Near Peta 1 / Gamma 1, Greater Noida</p>
+                        <span style="font-size: 12px; font-weight: 700; color: #f59e0b;"><i class="fa-solid fa-star"></i> 4.9 / 5.0 (120+ Reviews)</span>
+                    </div>
+                </div>
+                <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 13px; color: var(--text-main); margin-bottom: 12px; border: 1px solid var(--border);">
+                    <p style="margin-bottom: 6px;">• <strong>Youth & Community Welfare:</strong> Prominent NGO dedicated to child rehabilitation, youth empowerment, and community care.</p>
+                    <p>• <strong>Stray Animal Foster Support:</strong> Cooperates with local volunteers for medical aid, foster space, and emergency stray rescues.</p>
+                </div>
+                <p style="font-size: 13px; margin-bottom: 8px;"><strong>Accepted Animals:</strong> Dogs, Cats, Stray Animals</p>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+                    <span>Shelter Foster Capacity</span>
+                    <span style="color: var(--primary);">38 / 50 Occupied</span>
+                </div>
+                <p style="font-size: 13px; color: var(--success); font-weight: 700; margin-bottom: 16px;"><i class="fa-solid fa-circle-check"></i> 12 Spaces Available</p>
+                <button class="btn-card-action" onclick="openOrgModal(1)"><i class="fa-solid fa-circle-info"></i> View Full NGO Details</button>
+            </div>
+
+            <div class="shelter-card">
+                <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 14px;">
+                    <img src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=200&q=80" alt="Neem Karori Baba Gau Sewa Noida" onclick="openOrgModal(2)" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 2px solid var(--primary-light); cursor: pointer;">
+                    <div>
+                        <h3 onclick="openOrgModal(2)" style="font-size: 19px; color: var(--primary-dark); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(0,0,0,0.15);">Neem Karori Baba Gau Sewa</h3>
+                        <p style="color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-location-dot"></i> Sector 143A / Near Sector 135, Noida</p>
+                        <span style="font-size: 12px; font-weight: 700; color: #f59e0b;"><i class="fa-solid fa-star"></i> 4.8 / 5.0 (85+ Reviews)</span>
+                    </div>
+                </div>
+                <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 13px; color: var(--text-main); margin-bottom: 12px; border: 1px solid var(--border);">
+                    <p style="margin-bottom: 6px;">• <strong>Dedicated Cow Sanctuary & Medical Aid:</strong> Specializes in daily Gau Seva, medical treatment, and safe shelter for injured or stray cattle.</p>
+                    <p>• <strong>Organic Fodder & Volunteer Support:</strong> Provides organic green fodder, post-natal care for mother cows, and 24/7 volunteer assistance.</p>
+                </div>
+                <p style="font-size: 13px; margin-bottom: 8px;"><strong>Accepted Animals:</strong> Cows, Bulls, Calves, Buffaloes</p>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+                    <span>Occupancy Capacity</span>
+                    <span style="color: var(--primary);">75 / 100 Occupied</span>
+                </div>
+                <p style="font-size: 13px; color: var(--success); font-weight: 700; margin-bottom: 16px;"><i class="fa-solid fa-circle-check"></i> 25 Spaces Available</p>
+                <button class="btn-card-action" onclick="openOrgModal(2)"><i class="fa-solid fa-circle-info"></i> View Gaushala Details</button>
+            </div>
+
+            <div class="shelter-card">
+                <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 14px;">
+                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=200&q=80" alt="Magicvets Pet Clinic" onclick="openOrgModal(3)" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 2px solid var(--primary-light); cursor: pointer;">
+                    <div>
+                        <h3 onclick="openOrgModal(3)" style="font-size: 19px; color: var(--primary-dark); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(0,0,0,0.15);">Magicvets Pet Clinic & Grooming</h3>
+                        <p style="color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-location-dot"></i> Sector 2, Greater Noida West</p>
+                        <span style="font-size: 12px; font-weight: 700; color: #f59e0b;"><i class="fa-solid fa-star"></i> 4.1 / 5.0 (152 Reviews)</span>
+                    </div>
+                </div>
+                <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 13px; color: var(--text-main); margin-bottom: 12px; border: 1px solid var(--border);">
+                    <p style="margin-bottom: 6px;">• <strong>24/7 Medical Care & Pet Ambulance:</strong> Full-service veterinary clinic offering diagnostics, emergency surgery, and home visit care.</p>
+                    <p>• <strong>Grooming & Stray Treatment:</strong> Professional pet grooming alongside emergency medical treatment & foster support for local stray animals.</p>
+                </div>
+                <p style="font-size: 13px; margin-bottom: 8px;"><strong>Accepted Animals:</strong> Dogs, Cats, Goats, Small Pets</p>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+                    <span>Occupancy Capacity</span>
+                    <span style="color: var(--danger);">72 / 80 Occupied</span>
+                </div>
+                <p style="font-size: 13px; color: var(--warning); font-weight: 700; margin-bottom: 16px;"><i class="fa-solid fa-triangle-exclamation"></i> Only 8 Spaces Left</p>
+                <button class="btn-card-action" onclick="openOrgModal(3)"><i class="fa-solid fa-circle-info"></i> View Health Center Details</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ADOPTION PAGE -->
+    <section id="adoption" class="page">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>Animals Ready for Adoption</h2>
+                <p>Every rescued animal deserves a second chance at a loving home</p>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80" alt="Bruno">
+                </div>
+                <div class="card-content">
+                    <h3>Bruno</h3>
+                    <div class="card-info"><i class="fa-solid fa-paw"></i> Labrador Mix • Male • 2 Years</div>
+                    <div class="card-info"><i class="fa-solid fa-location-dot"></i> Partner Rescue Facility</div>
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 8px 0;">Friendly, playful, and great with kids. Fully vaccinated and health-checked.</p>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openAdoptionModal('Bruno', 'Dog (Labrador Mix)', 'Facility')">
+                            <i class="fa-solid fa-heart"></i> Adopt Bruno
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80" alt="Luna">
+                </div>
+                <div class="card-content">
+                    <h3>Luna</h3>
+                    <div class="card-info"><i class="fa-solid fa-paw"></i> Domestic Shorthair • Female • 1 Year</div>
+                    <div class="card-info"><i class="fa-solid fa-location-dot"></i> Partner Rescue Facility</div>
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 8px 0;">Gentle and loves cuddling. Rescued from rainstorm, now fully recovered.</p>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openAdoptionModal('Luna', 'Cat', 'Facility')">
+                            <i class="fa-solid fa-heart"></i> Adopt Luna
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80" alt="Rocky">
+                </div>
+                <div class="card-content">
+                    <h3>Rocky</h3>
+                    <div class="card-info"><i class="fa-solid fa-paw"></i> Indian Pariah • Male • 3 Years</div>
+                    <div class="card-info"><i class="fa-solid fa-location-dot"></i> Partner Rescue Facility</div>
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 8px 0;">Loyal, intelligent guard dog. Highly active and trained in basic commands.</p>
+                    <div class="card-footer">
+                        <button class="btn-card-action" onclick="openAdoptionModal('Rocky', 'Indian Pariah Dog', 'Facility')">
+                            <i class="fa-solid fa-heart"></i> Adopt Rocky
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section id="profile" class="page">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img src="profile_avatar.jpg" alt="Your profile" class="profile-avatar-img">
+                <div>
+                    <h2 id="helperProfileName" style="font-size: 24px; color: var(--primary-dark);">Your Name</h2>
+                    <p id="helperProfileMemberSince" style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">PashuRaksha Helper</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                <div style="background: var(--bg-main); padding: 18px; border-radius: 12px; text-align: center;">
+                    <span id="helperProfileReports" style="font-size: 28px; font-weight: 800; color: var(--primary);">0</span>
+                    <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Reports Submitted</p>
+                </div>
+                <div style="background: var(--bg-main); padding: 18px; border-radius: 12px; text-align: center;">
+                    <span id="helperProfileRescued" style="font-size: 28px; font-weight: 800; color: var(--primary-light);">0</span>
+                    <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Animals Rescued from My Reports</p>
+                </div>
+            </div>
+
+            <!-- ANIMAL RESCUE NOTIFICATIONS -->
+            <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                    <h3 style="font-size: 17px; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-bell" style="color: var(--accent);"></i>
+                        NGO Rescue Acceptance & Status
+                    </h3>
+                    <span id="helperProfileNotifCount" style="font-size: 12px; font-weight: 700; background: var(--bg-main); color: var(--text-muted); padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border);">0 updates</span>
+                </div>
+                <div id="helperNotificationsList" style="display: flex; flex-direction: column; gap: 12px; max-height: 420px; overflow-y: auto; padding-right: 4px;">
+                    <div style="background: var(--bg-main); padding: 18px; border-radius: 12px; text-align: center; color: var(--text-muted); font-size: 13px;">
+                        <i class="fa-solid fa-clipboard-check" style="font-size: 24px; margin-bottom: 8px; color: var(--text-muted); opacity: 0.6; display: block;"></i>
+                        No rescue requests submitted yet. When you report an injured animal, NGO acceptance alerts and live status updates will appear here.
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <div style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap:16px;">
+                    <strong>Full Name:</strong> <span id="helperProfileFullName">—</span>
+                </div>
+                <div style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap:16px;">
+                    <strong>Mobile Number:</strong> <span id="helperProfilePhone">—</span>
+                </div>
+                <div style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap:16px;">
+                    <strong>Primary Location:</strong> <span id="helperProfileLocation">Not added yet</span>
+                </div>
+            </div>
+
+            <button class="btn-card-action" onclick="showToast('Your profile details come from the account you registered with.')"><i class="fa-solid fa-user-check"></i> Account Profile</button>
+        </div>
+    </section>
+
+</main>
+
+<!-- MODALS -->
+<!-- 1. ADOPTION MODAL -->
+<div class="modal-overlay" id="adoptionModal">
+    <div class="modal-box">
+        <i class="fa-solid fa-xmark modal-close" onclick="closeModals()"></i>
+        <h3 style="font-size: 22px; color: var(--primary-dark); margin-bottom: 12px;" id="modalPetTitle">Adopt Pet</h3>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Please confirm your contact information. Our adoption coordinator will get in touch for home verification.</p>
+        
+        <form onsubmit="handleAdoptionSubmit(event)">
+            <div class="form-group">
+                <label>Your Full Name</label>
+                <input type="text" value="Rahul Sharma" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" value="+91 98 ********" required>
+            </div>
+            <div class="form-group">
+                <label>Residential Type</label>
+                <select required>
+                    <option>Apartment with balcony</option>
+                    <option>Independent House with Yard</option>
+                    <option>Farmhouse / Villa</option>
+                </select>
+            </div>
+            <button class="btn-submit" type="submit">Submit Adoption Application</button>
+        </form>
+    </div>
+</div>
+
+<!-- 2. EMERGENCY MODAL -->
+<div class="modal-overlay" id="emergencyModal">
+    <div class="modal-box" style="border-top: 6px solid var(--danger);">
+        <i class="fa-solid fa-xmark modal-close" onclick="closeModals()"></i>
+        <h3 style="font-size: 22px; color: var(--danger); margin-bottom: 12px;"><i class="fa-solid fa-triangle-exclamation"></i> Emergency Animal Hotline</h3>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Direct hotline to trigger 24/7 veterinary ambulance in Jaipur, Ajmer, Kota & Udaipur.</p>
+        
+        <div style="background: var(--danger-bg); padding: 18px; border-radius: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: 800; color: var(--danger);"><i class="fa-solid fa-phone-volume"></i> 1800-727-8435</div>
+            <p style="font-size: 12px; color: #991b1b; margin-top: 4px;">Toll-Free SOS Rescue Line</p>
+        </div>
+    </div>
+</div>
+
+<!-- 3. NGO / SHELTER / HEALTH CENTER DETAILS MODAL -->
+<div class="modal-overlay" id="orgModal">
+    <div class="modal-box" style="max-width: 650px; border-top: 6px solid var(--primary);">
+        <i class="fa-solid fa-xmark modal-close" onclick="closeModals()"></i>
+        <div style="display: flex; gap: 18px; align-items: center; margin-bottom: 16px;">
+            <img id="orgModalImg" src="" style="width: 75px; height: 75px; border-radius: 14px; object-fit: cover; border: 2px solid var(--primary-light);">
+            <div>
+                <span id="orgModalBadge" class="badge badge-completed" style="margin-bottom: 6px; display: inline-block;">NGO</span>
+                <h3 id="orgModalName" style="font-size: 22px; color: var(--primary-dark); margin: 0;">Udayan Care NGO</h3>
+                <p id="orgModalLocation" style="font-size: 13px; color: var(--text-muted); margin-top: 2px;"></p>
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 18px; border: 1px solid var(--border);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14px; margin-bottom: 12px;">
+                <div><strong>⭐ Star Rating:</strong> <span id="orgModalRating" style="color: #f59e0b; font-weight: 700;"></span></div>
+                <div><strong>🐾 Accepted Animals:</strong> <span id="orgModalAnimals"></span></div>
+            </div>
+            <div style="font-size: 13px; color: var(--text-main); line-height: 1.6;" id="orgModalDesc"></div>
+        </div>
+
+        <h4 style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px;">Key Services & Facilities</h4>
+        <ul id="orgModalServices" style="font-size: 13px; color: var(--text-main); padding-left: 20px; margin-bottom: 20px; line-height: 1.8;"></ul>
+
+        <div style="background: #eef2ff; padding: 14px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; border: 1px solid #c7d2fe;">
+            <div style="margin-bottom: 6px;"><strong>📍 Full Address:</strong> <span id="orgModalAddress"></span></div>
+            <div style="margin-bottom: 6px;"><strong>📞 Helpline Phone:</strong> <a id="orgModalPhoneLink" href="" style="color: var(--primary); font-weight: 700;"></a></div>
+            <div><strong>🌐 Official Website:</strong> <a id="orgModalWebLink" href="" target="_blank" style="color: var(--primary); font-weight: 700;"></a></div>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+            <a id="orgCallBtn" href="" class="btn-card-action" style="flex:1; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;"><i class="fa-solid fa-phone"></i> Call Contact</a>
+            <a id="orgWebBtn" href="" target="_blank" class="btn-hero-primary" style="flex:1; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px;"><i class="fa-solid fa-globe"></i> Visit Official Site</a>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <i class="fa-solid fa-circle-check" style="color:#6ee7b7; font-size:20px;"></i>
+    <span id="toastMessage">Action completed successfully!</span>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div>
+            <div class="footer-logo">🐾 PashuRaksha</div>
+            <p style="color: #a7f3d0; font-size: 14px; max-width: 320px;">PashuRaksha is dedicated to building intelligent community network tools to rescue, rehabilitate, and rehome every homeless animal.</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+                <li><a onclick="showPage('home')">Home Dashboard</a></li>
+                <li><a onclick="showPage('report')">Report Stray Animal</a></li>
+                <li><a onclick="showPage('rescue')">Live Rescue Cases</a></li>
+                <li><a onclick="showPage('shelters')">Shelter Directory</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Helpline</h4>
+            <p style="font-size: 14px; color: #d1fae5;">📞 Toll-Free: 1800-PASU-HELP</p>
+            <p style="font-size: 14px; color: #d1fae5; margin-top: 6px;">✉️ sos@pashuraksha.org</p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+    </div>
+</footer>
+
+<script>
+    // PAGE NAVIGATION
+    function showPage(pageId) {
+        document.querySelectorAll(".page").forEach(page => {
+            page.classList.remove("active");
+        });
+        document.querySelectorAll(".nav-links li").forEach(link => {
+            link.classList.remove("active");
+        });
+
+        const activePage = document.getElementById(pageId);
+        if (activePage) {
+            activePage.classList.add("active");
+        }
+
+        const activeNav = document.getElementById("nav-" + pageId);
+        if (activeNav) {
+            activeNav.classList.add("active");
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        document.getElementById("navLinks").classList.remove("show");
+        if (pageId === 'profile' && typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'helper') loadHelperProfile();
+    }
+
+    // MOBILE MENU
+    function toggleMenu() {
+        document.getElementById("navLinks").classList.toggle("show");
+    }
+
+    // CITY STATS FILTER
+    const cityData = {
+        all: { reports: 248, rescued: 183, active: 32, adopted: 96 },
+        greater_noida: { reports: 72, rescued: 54, active: 10, adopted: 28 },
+        noida: { reports: 85, rescued: 68, active: 12, adopted: 34 },
+        gurgaon: { reports: 56, rescued: 41, active: 6, adopted: 22 },
+        delhi: { reports: 35, rescued: 20, active: 4, adopted: 12 }
+    };
+
+    function updateCityStats() {
+        const city = document.getElementById("cityFilter").value;
+        const data = cityData[city] || cityData.all;
+        
+        document.getElementById("stat-reports").innerText = data.reports;
+        document.getElementById("stat-rescued").innerText = data.rescued;
+        document.getElementById("stat-active").innerText = data.active;
+        document.getElementById("stat-adopted").innerText = data.adopted;
+        showToast("Dashboard stats updated for " + (city.toUpperCase()));
+    }
+
+    // REAL TIME REPORT TRACKER
+    const sampleTrackerData = {
+        "PR-8042": { title: "Injured Stray Dog", status: "Rescue Van En-route", driver: "Ramesh Kumar (Ambulance #4)", eta: "8 mins", step: 2 },
+        "PR-9102": { title: "Dehydrated Golden Mix", status: "Under Medical Care at Shelter", driver: "Dr. Anita Sharma", eta: "In Treatment", step: 3 },
+        "PR-4431": { title: "Stray Mother Cow", status: "Transferred to Gaushala", driver: "Jeev Daya Team", eta: "Completed", step: 4 }
+    };
+
+    function trackRescueReport() {
+        const input = document.getElementById("trackInput").value.trim().toUpperCase();
+        const resultBox = document.getElementById("trackerResult");
+
+        if (!input) {
+            showToast("Please enter a valid Report ID like PR-8042");
+            return;
+        }
+
+        const data = sampleTrackerData[input] || {
+            title: "Report #" + input,
+            status: "Report Received & AI Priority Assigned",
+            driver: "Dispatching Nearest Volunteer",
+            eta: "15 mins",
+            step: 1
+        };
+
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <strong>${data.title}</strong>
+                <span class="badge badge-high">${data.status}</span>
+            </div>
+            <div style="font-size:13px; color:var(--text-muted);">Assigned Handler: <strong>${data.driver}</strong></div>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Estimated Arrival: <strong>${data.eta}</strong></div>
+            <div style="margin-top:12px; background:#e2e8f0; height:8px; border-radius:10px; overflow:hidden;">
+                <div style="width: ${data.step * 25}%; height:100%; background:var(--primary-light);"></div>
+            </div>
+        `;
+    }
+
+    // ANIMAL CONDITION CAMERA SCANNER
+    function triggerAiCameraScan() {
+        document.getElementById("aiCameraInput").click();
+    }
+
+    function handleAiCameraScan(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                document.getElementById("aiCameraInitialView").style.display = "none";
+                document.getElementById("aiScanPreviewBox").style.display = "block";
+                document.getElementById("aiScanPreviewImg").src = e.target.result;
+
+                const output = document.getElementById("aiScanOutput");
+                output.style.display = "block";
+                output.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Analyzing captured animal photo with Computer Vision model...";
+
+                setTimeout(() => {
+                    output.innerHTML = `
+                        <div style="margin-bottom:6px;"><strong>✅ Species Detected:</strong> Stray Animal (96.4% Match Confidence)</div>
+                        <div style="margin-bottom:6px;"><strong>🚨 Condition Assessment:</strong> Moderate Trauma / Limb Injury</div>
+                        <div style="margin-bottom:6px;"><strong>📍 Shelter Auto-Mapping:</strong> Mapped to <strong>Udayan Care NGO</strong> (12 Slots Free)</div>
+                        <div style="font-size:12px; color:#cbd5e1; margin-top:8px;">💡 Photo scanned successfully. Click box to take or upload another photo.</div>
+                    `;
+                    showToast("📷 Animal photo captured & scanned successfully!");
+                }, 1400);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // FORM SUBMISSION, IMAGE UPLOAD & REAL DEVICE GPS
+    function fileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error('Could not read the selected photo.'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    document.getElementById("reportForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('pr_token');
+        if (!token) { showAuthScreen(); showToast('Please log in before submitting a rescue request.'); return; }
+        const photoInput = document.getElementById('photoInput');
+        const photo = photoInput.files && photoInput.files[0];
+        const species = document.getElementById('reportType').value;
+        const condition = document.getElementById('reportCondition').value;
+        const location = document.getElementById('reportLocation').value.trim();
+        if (!species || !condition || !location) {
+            showToast('Please select the animal species and condition, and enter its location.');
+            return;
+        }
+        if (!photo) { showToast('Please upload a JPG, PNG, or WEBP photo of the animal before submitting.'); photoInput.click(); return; }
+        if (!['image/jpeg','image/png','image/webp'].includes(photo.type)) { showToast('This photo format is not supported. Please choose a JPG, PNG, or WEBP image.'); return; }
+        if (photo.size > 10 * 1024 * 1024) { showToast('The animal photo must be 10 MB or smaller.'); return; }
+
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Submitting report…';
+        try {
+            const payload = {
+                species,
+                condition,
+                location,
+                description: document.getElementById('reportDescription').value.trim(),
+                is_emergency: document.getElementById('emergencyCheck').checked,
+                latitude: document.getElementById('reportLatitude').value || null,
+                longitude: document.getElementById('reportLongitude').value || null,
+                photoData: await fileAsDataUrl(photo)
+            };
+            const response = await fetch(API_BASE + '/api/reports', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify(payload) });
+            let data = {};
+            try { data = await response.json(); } catch (_) { data = {}; }
+            if (response.status === 401) {
+                localStorage.removeItem('pr_token');
+                currentUser = null;
+                showAuthScreen();
+                throw new Error('Your login session has expired. Please log in again, then submit the report.');
+            }
+            if (!response.ok) throw new Error(data.error || (response.status === 413 ? 'The request is too large. Please use a photo under 10 MB.' : 'Could not submit report. Please check the required fields and try again.'));
+            showToast('✅ Rescue request submitted! Tracking ID: ' + data.tracking_id);
+            this.reset();
+            document.getElementById('filePreviewName').innerText = '';
+            document.getElementById('filePreviewImage').style.display = 'none';
+            document.getElementById('filePreviewImage').removeAttribute('src');
+            document.getElementById('reportLatitude').value = '';
+            document.getElementById('reportLongitude').value = '';
+            document.getElementById('gpsStatus').textContent = 'GPS coordinates are optional; allow location access when prompted.';
+            if (currentUser && currentUser.role === 'helper') loadHelperProfile();
+        } catch (err) {
+            showToast(err.message || 'Could not submit the report. Please try again.');
+            console.error('Report submission error:', err);
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+        }
+    });
+
+    function previewUpload(input) {
+        const file = input.files && input.files[0];
+        const name = document.getElementById('filePreviewName');
+        const preview = document.getElementById('filePreviewImage');
+        if (!file) { name.textContent = ''; preview.style.display = 'none'; preview.removeAttribute('src'); return; }
+        if (!['image/jpeg','image/png','image/webp'].includes(file.type)) {
+            input.value = ''; name.textContent = ''; preview.style.display = 'none';
+            showToast('Please choose a JPG, PNG, or WEBP image.'); return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            input.value = ''; name.textContent = ''; preview.style.display = 'none';
+            showToast('The animal photo must be 10 MB or smaller.'); return;
+        }
+        name.textContent = 'Selected: ' + file.name;
+        const objectUrl = URL.createObjectURL(file);
+        preview.onload = () => URL.revokeObjectURL(objectUrl);
+        preview.src = objectUrl;
+        preview.style.display = 'block';
+    }
+
+    function useCurrentLocation() {
+        const status = document.getElementById('gpsStatus');
+        if (!navigator.geolocation) {
+            status.textContent = 'This browser does not support GPS location. Please enter the location manually.';
+            showToast('GPS is not supported by this browser.');
+            return;
+        }
+        status.textContent = 'Requesting permission and fetching your device location…';
+        showToast('Please allow location access in your browser.');
+        navigator.geolocation.getCurrentPosition(position => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            document.getElementById('reportLatitude').value = latitude;
+            document.getElementById('reportLongitude').value = longitude;
+            document.getElementById('reportLocation').value = `GPS coordinates: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+            status.textContent = `GPS captured: ${latitude.toFixed(6)}, ${longitude.toFixed(6)} (accuracy about ${Math.round(position.coords.accuracy)} m). You can add a street/landmark to the location field.`;
+            showToast('GPS coordinates captured from your device.');
+        }, error => {
+            const messages = {
+                1: 'Location permission was denied. Allow location access in browser settings and try again.',
+                2: 'Your device could not determine the location. Try again outdoors or enter it manually.',
+                3: 'GPS request timed out. Please try again.'
+            };
+            status.textContent = messages[error.code] || 'Could not get GPS. Please enter the location manually.';
+            showToast('Could not get GPS location.');
+        }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+    }
+
+    // Let users drag a photo onto the existing upload area as well as browse their device.
+    const animalUploadBox = document.querySelector('#reportForm .file-upload-box');
+    if (animalUploadBox) {
+        animalUploadBox.addEventListener('dragover', event => { event.preventDefault(); animalUploadBox.style.outline = '2px dashed var(--primary)'; });
+        animalUploadBox.addEventListener('dragleave', () => { animalUploadBox.style.outline = ''; });
+        animalUploadBox.addEventListener('drop', event => {
+            event.preventDefault(); animalUploadBox.style.outline = '';
+            const file = event.dataTransfer.files && event.dataTransfer.files[0];
+            if (!file) return;
+            const transfer = new DataTransfer(); transfer.items.add(file);
+            const input = document.getElementById('photoInput'); input.files = transfer.files; previewUpload(input);
+        });
+    }
+
+    // MODAL HANDLERS
+    function openAdoptionModal(name, breed, city) {
+        document.getElementById("modalPetTitle").innerText = "Adopt " + name + " (" + breed + ")";
+        document.getElementById("adoptionModal").classList.add("active");
+    }
+
+    const localOrgsDataset = {
+        1: {
+            name: "Udayan Care NGO",
+            category: "NGO",
+            location: "Near Peta 1 / Gamma 1, Greater Noida",
+            full_address: "NS-14, D Block, Gamma 1, Greater Noida, Uttar Pradesh 201310",
+            rating: "4.9 / 5.0 (120+ Reviews)",
+            phone: "+91 11 4654 8105",
+            website: "https://udayanwelfare.mycreativedesigns.in/animal-care-welfare/",
+            accepted_animals: "Dogs, Cats, Stray Animals",
+            thumbnail_url: "https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?auto=format&fit=crop&w=300&q=80",
+            description: "Prominent non-profit organization dedicated to child welfare, youth empowerment, and local community stray animal foster support in Greater Noida.",
+            key_services: [
+                "Child & Youth Empowerment Programs",
+                "Emergency Stray Animal Foster Space",
+                "Community Medical Aid & Vaccination Support",
+                "Local Rescue Volunteer Network Coordination"
+            ]
+        },
+        2: {
+            name: "Neem Karori Baba Gau Sewa",
+            category: "Gaushala",
+            location: "Sector 143A / Near Sector 135, Noida",
+            full_address: "Sector 143A, Near Expressway Noida, Uttar Pradesh 201305",
+            rating: "4.8 / 5.0 (85+ Reviews)",
+            phone: "+91 98991 33399",
+            website: "https://www.justdial.com/Greater-Noida/Neem-Karori-Baba-Gau-Sewa-Near-Shree-Shyam-Kunj-Sector-144-Noida-Sector-143a/011PXX11-XX11-260219075640-Z4K9_BZDET",
+            accepted_animals: "Cows, Bulls, Calves, Buffaloes",
+            thumbnail_url: "https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=300&q=80",
+            description: "Dedicated cow sanctuary specializing in daily Gau Seva, emergency medical care, and lifelong shelter for injured, old, or abandoned street cattle.",
+            key_services: [
+                "Daily Gau Seva & Organic Fodder Feeding",
+                "Veterinary Wound Care & Post-Natal Mother Cow Care",
+                "24/7 Cattle Transport & Shelter Sanctuary",
+                "Public Feeding & Volunteer Seva Opportunities"
+            ]
+        },
+        3: {
+            name: "Magicvets Pet Clinic & Grooming",
+            category: "Health Care Center",
+            location: "Sector 2, Greater Noida West",
+            full_address: "C-148, Sector 2, Patwari, Greater Noida West, Gautam Budh Nagar, UP 201310",
+            rating: "4.1 / 5.0 (152 Reviews)",
+            phone: "+91 85108 56789",
+            website: "https://www.magicvets.com",
+            accepted_animals: "Dogs, Cats, Goats, Small Pets",
+            thumbnail_url: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=300&q=80",
+            description: "Full-service 24/7 veterinary clinic and grooming center providing advanced diagnostics, emergency surgeries, pet ambulance, and stray foster treatment.",
+            key_services: [
+                "24/7 Pet Ambulance & Doorstep Home Visits",
+                "Advanced Digital X-Ray, Blood Diagnostics & Surgery",
+                "Professional Hygienic Pet Grooming & Spa",
+                "Anti-Rabies Vaccination & Parasite Prevention"
+            ]
+        }
+    };
+
+    async function openOrgModal(id) {
+        let org = null;
+        try {
+            const res = await fetch('http://localhost:5000/api/shelters/' + id);
+            if (res.ok) {
+                org = await res.json();
+            }
+        } catch (e) {
+            console.log("Using local organization memory fallback");
+        }
+
+        if (!org) {
+            org = localOrgsDataset[id];
+        }
+
+        if (!org) return;
+
+        document.getElementById("orgModalImg").src = org.thumbnail_url;
+        document.getElementById("orgModalBadge").innerText = org.category;
+        document.getElementById("orgModalName").innerText = org.name;
+        document.getElementById("orgModalLocation").innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + org.location;
+        document.getElementById("orgModalRating").innerText = (org.rating || '') + " " + (org.review_count || '');
+        document.getElementById("orgModalAnimals").innerText = org.accepted_animals;
+        document.getElementById("orgModalDesc").innerText = org.description;
+        document.getElementById("orgModalAddress").innerText = org.full_address;
+
+        const phone = org.phone || "+91 1800-PASU-HELP";
+        document.getElementById("orgModalPhoneLink").href = "tel:" + phone.replace(/\s+/g, '');
+        document.getElementById("orgModalPhoneLink").innerText = phone;
+        document.getElementById("orgCallBtn").href = "tel:" + phone.replace(/\s+/g, '');
+
+        const website = org.website || "https://www.udayancare.org";
+        document.getElementById("orgModalWebLink").href = website;
+        document.getElementById("orgModalWebLink").innerText = website;
+        document.getElementById("orgWebBtn").href = website;
+
+        const servicesList = document.getElementById("orgModalServices");
+        servicesList.innerHTML = "";
+        (org.key_services || []).forEach(svc => {
+            const li = document.createElement("li");
+            li.innerText = svc;
+            servicesList.appendChild(li);
+        });
+
+        document.getElementById("orgModal").classList.add("active");
+    }
+
+    function openCaseModal(title, city, priority, status) {
+        showToast("Opening case record for: " + title + " in " + city);
+    }
+
+    function showEmergencyModal() {
+        document.getElementById("emergencyModal").classList.add("active");
+    }
+
+    function closeModals() {
+        document.querySelectorAll(".modal-overlay").forEach(m => m.classList.remove("active"));
+    }
+
+    function handleAdoptionSubmit(e) {
+        e.preventDefault();
+        closeModals();
+        showToast("❤️ Adoption request submitted successfully! Our team will contact you within 24 hours.");
+    }
+
+    function triggerEmergencySOS() {
+        closeModals();
+        showToast("🚨 Emergency SOS Triggered! GPS Dispatch Unit dispatched.");
+    }
+
+    // TOAST NOTIFICATIONS
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        document.getElementById("toastMessage").innerText = message;
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3500);
+    }
+
+
+    // AUTH + ROLE-BASED DASHBOARDS
+    const API_BASE = window.location.protocol === 'file:'
+        ? 'http://localhost:5000'
+        : ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? 'http://localhost:5000'
+            : window.location.origin);
+    let selectedAuthRole = 'helper';
+    let authMode = 'login';
+    let currentUser = null;
+    const authScreen = document.getElementById('authScreen');
+    const authForm = document.getElementById('authForm');
+    function showAuthScreen() {
+        document.body.classList.remove('authenticated','ngo-view');
+        document.getElementById('ngoDashboard').hidden = true;
+        authScreen.style.display = 'flex';
+        document.getElementById('rolePicker').hidden = false;
+        document.getElementById('authFormWrap').hidden = true;
+    }
+    function backToRoles() { document.getElementById('rolePicker').hidden = false; document.getElementById('authFormWrap').hidden = true; }
+    function chooseAuthRole(role, mode='login') {
+        selectedAuthRole = role; authMode = mode;
+        document.getElementById('rolePicker').hidden = true; document.getElementById('authFormWrap').hidden = false;
+        document.getElementById('authError').style.display = 'none';
+        document.getElementById('authTitle').textContent = (role === 'ngo' ? 'Rescue Center' : 'Helper') + (mode === 'login' ? ' Login' : ' Registration');
+        document.getElementById('authSubtitle').textContent = mode === 'login' ? 'Sign in with your registered mobile number and password.' : 'Create your PashuRaksha account to get started.';
+        document.getElementById('authNameWrap').hidden = mode === 'login';
+        document.getElementById('authOrgFields').hidden = role !== 'ngo' || mode === 'login';
+        document.getElementById('authName').required = mode === 'register';
+        document.getElementById('authSubmit').textContent = mode === 'login' ? 'Login' : 'Create account';
+        document.getElementById('authSwitchText').textContent = mode === 'login' ? 'New to PashuRaksha?' : 'Already have an account?';
+        document.getElementById('authSwitchBtn').textContent = mode === 'login' ? 'Create account' : 'Login';
+        document.getElementById('authPassword').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
+        document.getElementById('authForm').reset();
+        document.getElementById('authCapacity').value = '20';
+    }
+    function toggleAuthMode() { chooseAuthRole(selectedAuthRole, authMode === 'login' ? 'register' : 'login'); }
+    function togglePasswordVisibility() { const input=document.getElementById('authPassword'); input.type=input.type==='password'?'text':'password'; }
+    function showForgotPasswordInfo() { showAuthError('Password reset needs mobile OTP verification. SMS recovery is not connected yet; for now, use your registered password. We can add OTP recovery when you choose an SMS provider.'); }
+    function showAuthError(message) { const el=document.getElementById('authError'); el.textContent=message; el.style.display='block'; }
+    function setAuthenticated(user) {
+        currentUser = user;
+        authScreen.style.display = 'none';
+        if (user.role === 'ngo') {
+            document.body.classList.remove('authenticated'); document.body.classList.add('ngo-view');
+            document.getElementById('ngoDashboard').hidden = false;
+            document.getElementById('ngoHeaderName').textContent = user.organizationName || user.name;
+            loadNgoDashboard();
+        } else {
+            document.body.classList.add('authenticated'); document.body.classList.remove('ngo-view');
+            document.getElementById('ngoDashboard').hidden = true;
+            showPage('home');
+        }
+    }
+    authForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const payload = { role:selectedAuthRole, phone:document.getElementById('authPhone').value.trim(), password:document.getElementById('authPassword').value };
+        if (authMode === 'register') {
+            payload.name = document.getElementById('authName').value.trim();
+            if (selectedAuthRole === 'ngo') {
+                payload.location = document.getElementById('authLocation').value.trim();
+                payload.capacity = Number(document.getElementById('authCapacity').value || 0);
+            }
+        }
+        const button=document.getElementById('authSubmit'); button.disabled=true; button.textContent='Please wait…';
+        try {
+            const response = await fetch(API_BASE + '/api/auth/' + (authMode === 'login' ? 'login' : 'register'), {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+            const data=await response.json(); if(!response.ok) throw new Error(data.error || 'Authentication failed');
+            localStorage.setItem('pr_token',data.token); setAuthenticated(data.user);
+        } catch(err) { showAuthError(err.message.includes('Failed to fetch') ? 'Cannot reach the backend. Start the backend server first.' : err.message); }
+        finally { button.disabled=false; button.textContent=authMode === 'login' ? 'Login' : 'Create account'; }
+    });
+    async function restoreLogin() {
+        const token=localStorage.getItem('pr_token'); if(!token) return;
+        try { const r=await fetch(API_BASE+'/api/auth/me',{headers:{Authorization:'Bearer '+token}}); const d=await r.json(); if(r.ok) setAuthenticated(d.user); else localStorage.removeItem('pr_token'); }
+        catch(e) { /* Keep login screen visible if the backend is offline. */ }
+    }
+    async function logoutUser() {
+        const token=localStorage.getItem('pr_token');
+        try { if(token) await fetch(API_BASE+'/api/auth/logout',{method:'POST',headers:{Authorization:'Bearer '+token}}); } catch(e) {}
+        localStorage.removeItem('pr_token'); currentUser=null; showAuthScreen();
+    }
+    async function loadHelperProfile() {
+        const token = localStorage.getItem('pr_token');
+        if (!token || !currentUser || currentUser.role !== 'helper') return;
+        // Fill immediately from the registered account, then refresh report totals from the database.
+        const user = currentUser;
+        document.getElementById('helperProfileName').textContent = user.name || 'PashuRaksha Helper';
+        document.getElementById('helperProfileFullName').textContent = user.name || 'Not provided';
+        document.getElementById('helperProfilePhone').textContent = user.phone || 'Not provided';
+        document.getElementById('helperProfileLocation').textContent = user.location || 'Not added yet';
+        const joined = user.createdAt ? new Date(user.createdAt) : null;
+        document.getElementById('helperProfileMemberSince').textContent = joined && !Number.isNaN(joined.getTime()) ? 'Member since ' + joined.toLocaleDateString() : 'PashuRaksha Helper';
+        try {
+            const response = await fetch(API_BASE + '/api/helper/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Could not load profile');
+            currentUser = { ...currentUser, ...data.profile };
+            document.getElementById('helperProfileName').textContent = data.profile.name || 'PashuRaksha Helper';
+            document.getElementById('helperProfileFullName').textContent = data.profile.name || 'Not provided';
+            document.getElementById('helperProfilePhone').textContent = data.profile.phone || 'Not provided';
+            document.getElementById('helperProfileLocation').textContent = data.profile.location || 'Not added yet';
+            const reportList = data.reports || [];
+            document.getElementById('helperProfileReports').textContent = reportList.length;
+            document.getElementById('helperProfileRescued').textContent = reportList.filter(report => report.status === 'rescued').length;
+            renderHelperNotifications(reportList);
+        } catch (error) { console.warn('Could not refresh helper profile:', error); }
+    }
+
+    function renderHelperNotifications(reports) {
+        const list = document.getElementById('helperNotificationsList');
+        const badge = document.getElementById('profileNotifBadge');
+        const countSpan = document.getElementById('helperProfileNotifCount');
+        if (!list) return;
+
+        if (!Array.isArray(reports) || reports.length === 0) {
+            list.innerHTML = `
+                <div style="background: var(--bg-main); padding: 18px; border-radius: 12px; text-align: center; color: var(--text-muted); font-size: 13px;">
+                    <i class="fa-solid fa-clipboard-check" style="font-size: 24px; margin-bottom: 8px; color: var(--text-muted); opacity: 0.6; display: block;"></i>
+                    No rescue requests submitted yet. When you report an injured animal, live NGO acceptance alerts and updates will appear here.
+                </div>`;
+            if (badge) badge.style.display = 'none';
+            if (countSpan) countSpan.textContent = '0 updates';
+            return;
+        }
+
+        const acceptedReports = reports.filter(r => ['accepted', 'in_progress', 'rescued'].includes(r.status));
+        if (badge) {
+            if (acceptedReports.length > 0) {
+                badge.textContent = `${acceptedReports.length} accepted`;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        if (countSpan) {
+            countSpan.textContent = `${reports.length} report${reports.length === 1 ? '' : 's'} tracked`;
+        }
+
+        list.innerHTML = reports.map(r => {
+            const status = String(r.status || 'pending').toLowerCase();
+            const tracking = escapeHtml(r.tracking_id || 'PR-0000');
+            const species = escapeHtml(r.species || 'Animal');
+            const condition = escapeHtml(r.condition || 'Rescue Case');
+            const handler = escapeHtml(r.assigned_handler || 'Verified Rescue NGO');
+            const timeStr = new Date(r.updated_at || r.created_at).toLocaleString();
+
+            let statusPill = '';
+            let messageHtml = '';
+            let borderStyle = '';
+            let bgLight = '#ffffff';
+
+            if (status === 'accepted' || status === 'in_progress') {
+                statusPill = `<span style="background:#ecfdf5;color:#065f46;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;border:1px solid #a7f3d0;display:inline-flex;align-items:center;gap:4px;"><i class="fa-solid fa-circle-check"></i> ACCEPTED BY NGO</span>`;
+                messageHtml = `<span style="color:#065f46;font-weight:600;">✓ Accepted by ${handler}</span><br><span style="color:var(--text-muted);">Rescue team is coordinating response and care.</span>`;
+                borderStyle = 'border-left: 5px solid #10b981;';
+                bgLight = '#f0fdf4';
+            } else if (status === 'rescued') {
+                statusPill = `<span style="background:#eff6ff;color:#1e40af;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;border:1px solid #bfdbfe;display:inline-flex;align-items:center;gap:4px;"><i class="fa-solid fa-heart-circle-check"></i> SAFELY RESCUED</span>`;
+                messageHtml = `<span style="color:#1e40af;font-weight:600;">✓ Animal successfully rescued by ${handler}!</span><br><span style="color:var(--text-muted);">The animal has been treated and is in safe recovery.</span>`;
+                borderStyle = 'border-left: 5px solid #3b82f6;';
+                bgLight = '#f8fafc';
+            } else if (status === 'rejected') {
+                statusPill = `<span style="background:#fef2f2;color:#991b1b;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;border:1px solid #fecaca;display:inline-flex;align-items:center;gap:4px;"><i class="fa-solid fa-circle-xmark"></i> NOT ACCEPTED</span>`;
+                messageHtml = `<span style="color:#991b1b;font-weight:600;">✕ Center unavailable</span><br><span style="color:var(--text-muted);">This center reached capacity. Your report remains broadcast to other nearby volunteers.</span>`;
+                borderStyle = 'border-left: 5px solid #ef4444;';
+                bgLight = '#fff5f5';
+            } else {
+                statusPill = `<span style="background:#fffbeb;color:#92400e;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;border:1px solid #fde68a;display:inline-flex;align-items:center;gap:4px;"><i class="fa-solid fa-hourglass-half"></i> AWAITING NGO ACCEPTANCE</span>`;
+                messageHtml = `<span style="color:#92400e;font-weight:600;">⏳ Broadcasted to local NGOs</span><br><span style="color:var(--text-muted);">Your report was sent to nearby rescue centers. Awaiting an NGO to accept.</span>`;
+                borderStyle = 'border-left: 5px solid #f59e0b;';
+                bgLight = '#fffdf7';
+            }
+
+            return `
+                <div style="background:${bgLight};border:1px solid var(--border);${borderStyle}border-radius:10px;padding:14px;box-shadow:var(--shadow-sm);transition:var(--transition);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+                        <span style="font-weight:700;font-size:14px;color:var(--primary-dark);">
+                            <i class="fa-solid fa-paw" style="color:var(--primary);margin-right:5px;"></i>${condition} (${species})
+                        </span>
+                        ${statusPill}
+                    </div>
+                    <div style="font-size:13px;line-height:1.5;margin-bottom:8px;">${messageHtml}</div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-size:11px;color:var(--text-muted);border-top:1px dashed var(--border);padding-top:8px;margin-top:8px;">
+                        <span>Tracking ID: <strong>${tracking}</strong> · ${escapeHtml(r.location || '')}</span>
+                        <span><i class="fa-regular fa-clock"></i> ${timeStr}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    let helperRefreshTimerStarted = false;
+    function startHelperAutoRefresh() {
+        if (helperRefreshTimerStarted) return;
+        helperRefreshTimerStarted = true;
+        setInterval(() => {
+            if (currentUser && currentUser.role === 'helper' && !document.hidden) {
+                loadHelperProfile();
+            }
+        }, 10000);
+    }
+    startHelperAutoRefresh();
+
+    function showNgoTab(tab) {
+        document.querySelectorAll('.ngo-tab').forEach(el=>el.hidden=true);
+        const target=document.getElementById('ngoTab'+tab.charAt(0).toUpperCase()+tab.slice(1)); if(target) target.hidden=false;
+        document.querySelectorAll('.ngo-nav').forEach(el=>el.classList.toggle('active',el.dataset.ngotab===tab));
+        if(tab==='profile') fillNgoProfile();
+    }
+    async function apiRequest(path, options={}) {
+        const token=localStorage.getItem('pr_token');
+        const response=await fetch(API_BASE+path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{}),Authorization:'Bearer '+token}});
+        const data=await response.json(); if(!response.ok) throw new Error(data.error||'Request failed'); return data;
+    }
+    function isReportHandledByOrg(r, p) {
+        if (!r || !p) return false;
+        if (r.handled_by != null && Number(r.handled_by) === Number(p.id)) return true;
+        if (r.assigned_handler) {
+            const handler = String(r.assigned_handler).trim().toLowerCase();
+            const orgName = String(p.organizationName || '').trim().toLowerCase();
+            const userName = String(p.name || '').trim().toLowerCase();
+            if (orgName && handler === orgName) return true;
+            if (userName && handler === userName) return true;
+        }
+        return false;
+    }
+    async function loadNgoDashboard() {
+        try {
+            const data=await apiRequest('/api/ngo/dashboard');
+            const p=data.profile; currentUser={...currentUser,...p};
+            document.getElementById('ngoHeaderName').textContent=p.organizationName||p.name||'Rescue Center';
+            document.getElementById('ngoPendingCount').textContent=data.reports.filter(r=>['pending','Report Received & Priority Assigned','HIGH PRIORITY - Emergency Dispatch'].includes(r.status)).length;
+            document.getElementById('ngoAcceptedCount').textContent=data.reports.filter(r=>['accepted','in_progress','rescued'].includes(r.status) && isReportHandledByOrg(r, p)).length;
+            document.getElementById('ngoRescuedCount').textContent=Number(p.animalsRescued||0);
+            document.getElementById('ngoAnimalsTotal').textContent=Number(p.animalsRescued||0);
+            const occupied=Number(p.occupiedSlots||0), capacity=Number(p.capacity||0), available=Math.max(0,capacity-occupied), percent=capacity?Math.min(100,Math.round(occupied/capacity*100)):0;
+            document.getElementById('ngoOccupied').textContent=occupied; document.getElementById('ngoCapacityTotal').textContent=capacity; document.getElementById('ngoAvailable').textContent=available;
+            document.getElementById('ngoCapacityBar').style.width=percent+'%'; document.getElementById('ngoCapacityCaption').textContent=percent+'% of listed capacity occupied.';
+            renderNgoRequests(data.reports);
+        } catch(err) { document.getElementById('ngoRequestsList').innerHTML='<div class="ngo-empty">Could not load requests. Check that the backend server is running, then refresh.</div>'; console.error(err); }
+    }
+    // Keep the NGO Rescue Requests list in sync with reports submitted by helpers.
+    // Reports are stored in the shared backend database, so the NGO dashboard polls for new cases.
+    let ngoRefreshTimerStarted = false;
+    function startNgoReportAutoRefresh() {
+        if (ngoRefreshTimerStarted) return;
+        ngoRefreshTimerStarted = true;
+        setInterval(() => {
+            const dashboard = document.getElementById('ngoDashboard');
+            const requestsTab = document.getElementById('ngoTabRequests');
+            if (currentUser && currentUser.role === 'ngo' && dashboard && !dashboard.hidden && requestsTab && !requestsTab.hidden && !document.hidden) {
+                loadNgoDashboard();
+            }
+        }, 10000);
+    }
+    startNgoReportAutoRefresh();
+
+    function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function renderNgoRequests(reports) {
+        const box=document.getElementById('ngoRequestsList');
+        if(!reports.length) { box.innerHTML='<div class="ngo-empty">No rescue requests have arrived yet. New community reports will appear here.</div>'; return; }
+        const p = currentUser || {};
+        box.innerHTML=reports.map(r=>{
+            const status=String(r.status||'pending'); const pending=['pending','Report Received & Priority Assigned','HIGH PRIORITY - Emergency Dispatch'].includes(status);
+            const urgent=Boolean(r.is_emergency); const statusClass=['accepted','in_progress','rescued'].includes(status)?'done':(urgent?'urgent':'');
+            const reporter=r.reporterName||'Community member'; const phone=r.reporterPhone||'Not provided';
+            const isMine = isReportHandledByOrg(r, p);
+            let actionsHtml = '';
+            if (pending) {
+                actionsHtml = `<div class="ngo-actions"><button class="ngo-action accept" onclick="updateRescueRequest('${escapeHtml(r.tracking_id)}','accepted')"><i class="fa-solid fa-check"></i> Accept request</button><button class="ngo-action reject" onclick="updateRescueRequest('${escapeHtml(r.tracking_id)}','rejected')"><i class="fa-solid fa-xmark"></i> Reject</button></div>`;
+            } else if (isMine) {
+                actionsHtml = `<div class="ngo-actions"><button class="ngo-action" onclick="updateRescueRequest('${escapeHtml(r.tracking_id)}','in_progress')">Mark in progress</button><button class="ngo-action accept" onclick="updateRescueRequest('${escapeHtml(r.tracking_id)}','rescued')">Mark rescued</button></div>`;
+            } else {
+                actionsHtml = `<div class="ngo-actions" style="margin-top:12px;font-size:13px;color:var(--muted);"><i class="fa-solid fa-shield-halved"></i> Accepted by: <strong>${escapeHtml(r.assigned_handler || 'Another center')}</strong></div>`;
+            }
+            return `<article class="ngo-request"><div class="ngo-request-top"><div><h3>${escapeHtml(r.condition||'Animal rescue request')} · ${escapeHtml(r.species||'Animal')}</h3><div class="ngo-muted">Tracking ID: <strong>${escapeHtml(r.tracking_id||'')}</strong> · ${escapeHtml(new Date(r.created_at).toLocaleString())}</div></div><span class="ngo-tag ${statusClass}">${escapeHtml(status.replaceAll('_',' ').toUpperCase())}</span></div><p class="ngo-muted" style="margin-top:10px"><strong>Location:</strong> ${escapeHtml(r.location||'Not provided')}<br><strong>Reported by:</strong> ${escapeHtml(reporter)} · ${escapeHtml(phone)}<br><strong>Details:</strong> ${escapeHtml(r.description||'No additional details')}${urgent?'<br><strong style="color:#b91c1c">Immediate emergency reported</strong>':''}</p>${r.image_url?`<div style="margin-top:12px"><img src="${API_BASE+escapeHtml(r.image_url)}" alt="Animal photo for ${escapeHtml(r.tracking_id||'rescue request')}" loading="lazy" style="max-width:100%;max-height:280px;object-fit:contain;border-radius:10px;border:1px solid var(--border)"></div>`:''}${r.latitude!=null&&r.longitude!=null?`<p class="ngo-muted" style="margin-top:8px"><strong>GPS:</strong> ${Number(r.latitude).toFixed(6)}, ${Number(r.longitude).toFixed(6)} · <a href="https://www.google.com/maps?q=${Number(r.latitude)},${Number(r.longitude)}" target="_blank" rel="noopener">Open map</a></p>`:''}${actionsHtml}</article>`;
+        }).join('');
+    }
+    async function updateRescueRequest(id,status) {
+        try { await apiRequest('/api/ngo/reports/'+encodeURIComponent(id)+'/status',{method:'PATCH',body:JSON.stringify({status})}); showToast('Rescue request updated.'); await loadNgoDashboard(); }
+        catch(err) { showToast(err.message); }
+    }
+    function fillNgoProfile() {
+        const p=currentUser||{};
+        document.getElementById('ngoProfileName').value=p.organizationName||p.name||'';
+        document.getElementById('ngoProfilePhone').value=p.phone||'';
+        document.getElementById('ngoProfileLocation').value=p.location||'';
+        document.getElementById('ngoProfileAddress').value=p.address||'';
+        document.getElementById('ngoProfileAnimals').value=Number(p.animalsRescued||0);
+        document.getElementById('ngoProfileCapacity').value=Number(p.capacity||0);
+    }
+    document.getElementById('ngoProfileForm').addEventListener('submit',async function(e){
+        e.preventDefault();
+        const payload={organizationName:document.getElementById('ngoProfileName').value.trim(),name:document.getElementById('ngoProfileName').value.trim(),phone:document.getElementById('ngoProfilePhone').value.trim(),location:document.getElementById('ngoProfileLocation').value.trim(),address:document.getElementById('ngoProfileAddress').value.trim(),animalsRescued:Number(document.getElementById('ngoProfileAnimals').value||0),capacity:Number(document.getElementById('ngoProfileCapacity').value||0)};
+        try { const d=await apiRequest('/api/ngo/profile',{method:'PUT',body:JSON.stringify(payload)}); currentUser={...currentUser,...d.user}; showToast('Center profile saved.'); await loadNgoDashboard(); }
+        catch(err){showToast(err.message);}
+    });
+    restoreLogin();
+
+</script>
+</body>
+</html>
