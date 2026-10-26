@@ -1,15 +1,13 @@
 {
-    "version":2,
-    "builds":[
-        {
-            "src":"frontend.html",
-            "use":"@vercel/static"
-        }
-    ],
-    "routes":[
-        {
-            "src":"/",
-            "dest":"/frontend.html"
-        }
-    ]
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://pashuraksha-wjgy.onrender.com/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://pashuraksha-wjgy.onrender.com/uploads/:path*"
+    }
+  ]
 }

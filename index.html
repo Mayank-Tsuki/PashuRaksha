@@ -1371,11 +1371,11 @@
 
                 <div class="form-group">
                     <label>Animal Photo (Required)</label>
-                    <div class="file-upload-box" onclick="document.getElementById('photoInput').click()">
+                    <div class="file-upload-box" onclick="if(event.target.id !== 'photoInput') document.getElementById('photoInput').click()">
                         <i class="fa-solid fa-cloud-arrow-up" style="font-size: 32px; color: var(--primary); margin-bottom: 10px;"></i>
                         <p style="font-weight: 600; color: var(--text-main);">Click to Upload Photo or Drag & Drop</p>
                         <p style="font-size: 12px; color: var(--text-muted);">PNG, JPG, WEBP up to 10MB</p>
-                        <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" style="display: none;" onchange="previewUpload(this)">
+                        <input type="file" id="photoInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" style="display: none;" onclick="event.stopPropagation()" onchange="previewUpload(this)">
                     </div>
                     <div id="filePreviewName" style="margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 600;"></div>
                     <img id="filePreviewImage" alt="Selected animal preview" style="display:none; max-width:100%; max-height:260px; object-fit:contain; margin-top:12px; border-radius:10px;">
@@ -1424,7 +1424,7 @@
 
                 <div class="form-group">
                     <label>Description & Details</label>
-                    <textarea placeholder="Describe any visible wounds, exact spot where animal is resting, or helpful directions..."></textarea>
+                    <textarea id="reportDescription" placeholder="Describe any visible wounds, exact spot where animal is resting, or helpful directions..."></textarea>
                 </div>
 
                 <div class="form-group" style="background: #fef2f2; padding: 16px; border-radius: 10px; border: 1px solid #fecaca;">
@@ -1854,6 +1854,38 @@
 </footer>
 
 <script>
+    // PASHURAKSHA BACKEND CONFIGURATION
+    // When running locally: http://localhost:5000
+    // When running in production (Vercel): points to deployed Render backend API
+    const BACKEND_PROD_URL = "https://pashuraksha-wjgy.onrender.com";
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                        window.location.hostname === '127.0.0.1' || 
+                        window.location.protocol === 'file:';
+    const API_BASE = isLocalhost ? 'http://localhost:5000' : BACKEND_PROD_URL;
+
+    async function parseResponse(response) {
+        const text = await response.text();
+        let data;
+        try {
+            data = text ? JSON.parse(text) : {};
+        } catch (_) {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Requested service endpoint was not found (404). Please ensure the backend is running.');
+                }
+                if (response.status === 502 || response.status === 503 || response.status === 504) {
+                    throw new Error('Backend service is waking up (Render free tier may take up to 60s). Please wait a moment and try again.');
+                }
+                throw new Error(`Server returned status ${response.status}. Please try again.`);
+            }
+            throw new Error('Unexpected server response format.');
+        }
+        if (!response.ok) {
+            throw new Error(data.error || data.message || `Request failed with status ${response.status}`);
+        }
+        return data;
+    }
+
     // PAGE NAVIGATION
     function showPage(pageId) {
         document.querySelectorAll(".page").forEach(page => {
@@ -1910,7 +1942,7 @@
         "PR-4431": { title: "Stray Mother Cow", status: "Transferred to Gaushala", driver: "Jeev Daya Team", eta: "Completed", step: 4 }
     };
 
-    function trackRescueReport() {
+    async function trackRescueReport() {
         const input = document.getElementById("trackInput").value.trim().toUpperCase();
         const resultBox = document.getElementById("trackerResult");
 
@@ -1919,22 +1951,48 @@
             return;
         }
 
-        const data = sampleTrackerData[input] || {
-            title: "Report #" + input,
-            status: "Report Received & AI Priority Assigned",
-            driver: "Dispatching Nearest Volunteer",
-            eta: "15 mins",
-            step: 1
-        };
-
         resultBox.style.display = "block";
+        resultBox.innerHTML = '<div style="padding:10px;color:var(--text-muted);font-size:14px;"><i class="fa-solid fa-spinner fa-spin"></i> Checking rescue status...</div>';
+
+        let data = null;
+        try {
+            const response = await fetch(API_BASE + '/api/reports/track/' + encodeURIComponent(input));
+            if (response.ok) {
+                const apiData = await response.json();
+                if (apiData && apiData.found) {
+                    const statusStr = String(apiData.status || '').toLowerCase();
+                    let step = 1;
+                    if (statusStr.includes('rescued')) step = 4;
+                    else if (statusStr.includes('progress')) step = 3;
+                    else if (statusStr.includes('accept')) step = 2;
+                    data = {
+                        title: apiData.title || ("Report #" + input),
+                        status: apiData.status || "Report Received",
+                        driver: apiData.driver || "Assigned Rescue Team",
+                        eta: apiData.eta || "Pending update",
+                        step
+                    };
+                }
+            }
+        } catch (_) {}
+
+        if (!data) {
+            data = sampleTrackerData[input] || {
+                title: "Report #" + input,
+                status: "Report Received & AI Priority Assigned",
+                driver: "Dispatching Nearest Volunteer",
+                eta: "15 mins",
+                step: 1
+            };
+        }
+
         resultBox.innerHTML = `
             <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <strong>${data.title}</strong>
-                <span class="badge badge-high">${data.status}</span>
+                <strong>${escapeHtml(data.title)}</strong>
+                <span class="badge badge-high">${escapeHtml(data.status)}</span>
             </div>
-            <div style="font-size:13px; color:var(--text-muted);">Assigned Handler: <strong>${data.driver}</strong></div>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Estimated Arrival: <strong>${data.eta}</strong></div>
+            <div style="font-size:13px; color:var(--text-muted);">Assigned Handler: <strong>${escapeHtml(data.driver)}</strong></div>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Estimated Arrival: <strong>${escapeHtml(data.eta)}</strong></div>
             <div style="margin-top:12px; background:#e2e8f0; height:8px; border-radius:10px; overflow:hidden;">
                 <div style="width: ${data.step * 25}%; height:100%; background:var(--primary-light);"></div>
             </div>
@@ -1991,8 +2049,15 @@
         if (!token) { showAuthScreen(); showToast('Please log in before submitting a rescue request.'); return; }
         const photoInput = document.getElementById('photoInput');
         const photo = photoInput.files && photoInput.files[0];
-        if (!photo) { showToast('Please choose a photo of the animal from your device.'); photoInput.click(); return; }
-        if (!['image/jpeg','image/png','image/webp'].includes(photo.type)) { showToast('Please choose a JPG, PNG, or WEBP image.'); return; }
+        const species = document.getElementById('reportType').value;
+        const condition = document.getElementById('reportCondition').value;
+        const location = document.getElementById('reportLocation').value.trim();
+        if (!species || !condition || !location) {
+            showToast('Please select the animal species and condition, and enter its location.');
+            return;
+        }
+        if (!photo) { showToast('Please upload a JPG, PNG, or WEBP photo of the animal before submitting.'); photoInput.click(); return; }
+        if (!['image/jpeg','image/png','image/webp'].includes(photo.type)) { showToast('This photo format is not supported. Please choose a JPG, PNG, or WEBP image.'); return; }
         if (photo.size > 10 * 1024 * 1024) { showToast('The animal photo must be 10 MB or smaller.'); return; }
 
         const submitButton = this.querySelector('button[type="submit"]');
@@ -2001,18 +2066,23 @@
         submitButton.textContent = 'Submitting report…';
         try {
             const payload = {
-                species: document.getElementById('reportType').value,
-                condition: document.getElementById('reportCondition').value,
-                location: document.getElementById('reportLocation').value.trim(),
-                description: this.querySelector('textarea').value.trim(),
+                species,
+                condition,
+                location,
+                description: document.getElementById('reportDescription').value.trim(),
                 is_emergency: document.getElementById('emergencyCheck').checked,
                 latitude: document.getElementById('reportLatitude').value || null,
                 longitude: document.getElementById('reportLongitude').value || null,
                 photoData: await fileAsDataUrl(photo)
             };
             const response = await fetch(API_BASE + '/api/reports', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify(payload) });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Could not submit report');
+            if (response.status === 401) {
+                localStorage.removeItem('pr_token');
+                currentUser = null;
+                showAuthScreen();
+                throw new Error('Your login session has expired. Please log in again, then submit the report.');
+            }
+            const data = await parseResponse(response);
             showToast('✅ Rescue request submitted! Tracking ID: ' + data.tracking_id);
             this.reset();
             document.getElementById('filePreviewName').innerText = '';
@@ -2159,9 +2229,9 @@
     async function openOrgModal(id) {
         let org = null;
         try {
-            const res = await fetch('http://localhost:5000/api/shelters/' + id);
+            const res = await fetch(API_BASE + '/api/shelters/' + id);
             if (res.ok) {
-                org = await res.json();
+                org = await parseResponse(res);
             }
         } catch (e) {
             console.log("Using local organization memory fallback");
@@ -2238,7 +2308,6 @@
 
 
     // AUTH + ROLE-BASED DASHBOARDS
-    const API_BASE = 'http://localhost:5000';
     let selectedAuthRole = 'helper';
     let authMode = 'login';
     let currentUser = null;
@@ -2299,14 +2368,17 @@
         const button=document.getElementById('authSubmit'); button.disabled=true; button.textContent='Please wait…';
         try {
             const response = await fetch(API_BASE + '/api/auth/' + (authMode === 'login' ? 'login' : 'register'), {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-            const data=await response.json(); if(!response.ok) throw new Error(data.error || 'Authentication failed');
-            localStorage.setItem('pr_token',data.token); setAuthenticated(data.user);
-        } catch(err) { showAuthError(err.message.includes('Failed to fetch') ? 'Cannot reach the backend. Start the backend server first.' : err.message); }
+            const data = await parseResponse(response);
+            localStorage.setItem('pr_token', data.token);
+            setAuthenticated(data.user);
+        } catch(err) {
+            showAuthError(err.message.includes('Failed to fetch') ? 'Cannot reach backend server. Please verify your connection or wait a few moments if server is waking up.' : err.message);
+        }
         finally { button.disabled=false; button.textContent=authMode === 'login' ? 'Login' : 'Create account'; }
     });
     async function restoreLogin() {
         const token=localStorage.getItem('pr_token'); if(!token) return;
-        try { const r=await fetch(API_BASE+'/api/auth/me',{headers:{Authorization:'Bearer '+token}}); const d=await r.json(); if(r.ok) setAuthenticated(d.user); else localStorage.removeItem('pr_token'); }
+        try { const r=await fetch(API_BASE+'/api/auth/me',{headers:{Authorization:'Bearer '+token}}); const d=await parseResponse(r); setAuthenticated(d.user); }
         catch(e) { /* Keep login screen visible if the backend is offline. */ }
     }
     async function logoutUser() {
@@ -2327,8 +2399,7 @@
         document.getElementById('helperProfileMemberSince').textContent = joined && !Number.isNaN(joined.getTime()) ? 'Member since ' + joined.toLocaleDateString() : 'PashuRaksha Helper';
         try {
             const response = await fetch(API_BASE + '/api/helper/dashboard', { headers: { Authorization: 'Bearer ' + token } });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Could not load profile');
+            const data = await parseResponse(response);
             currentUser = { ...currentUser, ...data.profile };
             document.getElementById('helperProfileName').textContent = data.profile.name || 'PashuRaksha Helper';
             document.getElementById('helperProfileFullName').textContent = data.profile.name || 'Not provided';
@@ -2443,9 +2514,16 @@
         if(tab==='profile') fillNgoProfile();
     }
     async function apiRequest(path, options={}) {
-        const token=localStorage.getItem('pr_token');
-        const response=await fetch(API_BASE+path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{}),Authorization:'Bearer '+token}});
-        const data=await response.json(); if(!response.ok) throw new Error(data.error||'Request failed'); return data;
+        const token = localStorage.getItem('pr_token');
+        const response = await fetch(API_BASE + path, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options.headers || {}),
+                Authorization: 'Bearer ' + token
+            }
+        });
+        return await parseResponse(response);
     }
     function isReportHandledByOrg(r, p) {
         if (!r || !p) return false;
@@ -2474,6 +2552,22 @@
             renderNgoRequests(data.reports);
         } catch(err) { document.getElementById('ngoRequestsList').innerHTML='<div class="ngo-empty">Could not load requests. Check that the backend server is running, then refresh.</div>'; console.error(err); }
     }
+    // Keep the NGO Rescue Requests list in sync with reports submitted by helpers.
+    // Reports are stored in the shared backend database, so the NGO dashboard polls for new cases.
+    let ngoRefreshTimerStarted = false;
+    function startNgoReportAutoRefresh() {
+        if (ngoRefreshTimerStarted) return;
+        ngoRefreshTimerStarted = true;
+        setInterval(() => {
+            const dashboard = document.getElementById('ngoDashboard');
+            const requestsTab = document.getElementById('ngoTabRequests');
+            if (currentUser && currentUser.role === 'ngo' && dashboard && !dashboard.hidden && requestsTab && !requestsTab.hidden && !document.hidden) {
+                loadNgoDashboard();
+            }
+        }, 10000);
+    }
+    startNgoReportAutoRefresh();
+
     function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
     function renderNgoRequests(reports) {
         const box=document.getElementById('ngoRequestsList');

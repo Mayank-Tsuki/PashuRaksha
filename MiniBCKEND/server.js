@@ -10,7 +10,29 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const TOKEN_SECRET = process.env.TOKEN_SECRET || 'replace-this-development-secret-before-deployment';
 
-app.use(cors());
+// Configure CORS: allow frontend (Vercel deployments, custom domains, and localhost)
+const explicitOrigins = [
+    process.env.FRONTEND_URL,
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'http://127.0.0.1:5000',
+    'http://127.0.0.1:3000'
+].filter(Boolean);
+
+app.use(cors({
+    origin: function(origin, callback) {
+        if (!origin) return callback(null, true);
+        if (explicitOrigins.includes(origin)) return callback(null, true);
+        // Allow all Vercel domains (*.vercel.app)
+        if (/^https:\/\/([a-zA-Z0-9-]+\.)*vercel\.app$/.test(origin)) {
+            return callback(null, true);
+        }
+        return callback(null, true);
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(express.json({ limit: '20mb' }));
 
 // Serve the existing frontend from the same server as the API. This avoids
@@ -167,7 +189,7 @@ app.get('/api/helper/dashboard', authRequired, roleRequired('helper'), async (re
 
 // Individual helper submits a rescue request. Photo is saved to uploads/ and its URL is stored in the database.
 app.post('/api/reports', authRequired, roleRequired('helper'), async (req, res) => {
-    let savedPhotoPath = null;
+    let savedFilename = null;
     try {
         const { species, condition, location, description, is_emergency, photoData, latitude, longitude } = req.body;
         if (!species || !condition || !location || !String(location).trim()) {
@@ -184,7 +206,11 @@ app.post('/api/reports', authRequired, roleRequired('helper'), async (req, res) 
         }
         const extension = match[1].toLowerCase() === 'jpg' ? 'jpg' : match[1].toLowerCase();
         const filename = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}.${extension}`;
-        savedPhotoPath = path.join(uploadsDir, filename);
+        savedFilename = filename;
+        // Save image to MongoDB (and optionally to local disk for backward compatibility)
+        await db.saveImage(filename, match[1] === 'png' ? 'image/png' : (match[1] === 'webp' ? 'image/webp' : 'image/jpeg'), imageBuffer);
+        // Also write to local uploads folder (optional, can be removed later)
+        const savedPhotoPath = path.join(uploadsDir, filename);
         fs.writeFileSync(savedPhotoPath, imageBuffer, { flag: 'wx' });
         const trackingId = `PR-${crypto.randomInt(1000, 10000)}`;
         const lat = Number(latitude), lng = Number(longitude);
@@ -193,7 +219,7 @@ app.post('/api/reports', authRequired, roleRequired('helper'), async (req, res) 
             tracking_id: trackingId, species: String(species).slice(0, 80), condition: String(condition).slice(0, 160),
             location: String(location).trim().slice(0, 500), description: String(description || '').slice(0, 2000),
             latitude: hasCoordinates ? lat : null, longitude: hasCoordinates ? lng : null,
-            image_url: `/uploads/${filename}`,
+            image_url: `/api/image/${filename}`,
             is_emergency: is_emergency ? 1 : 0, status: 'pending',
             status_label: is_emergency ? 'Emergency request received' : 'Request received',
             assigned_handler: 'Awaiting rescue-center review', reporterId: req.user.id,
@@ -201,7 +227,12 @@ app.post('/api/reports', authRequired, roleRequired('helper'), async (req, res) 
         });
         res.status(201).json({ message: 'Rescue report created successfully.', tracking_id: trackingId, report });
     } catch (err) {
-        if (savedPhotoPath && fs.existsSync(savedPhotoPath)) { try { fs.unlinkSync(savedPhotoPath); } catch (_) {} }
+        if (savedFilename) {
+            const localPath = path.join(uploadsDir, savedFilename);
+            if (fs.existsSync(localPath)) {
+                try { fs.unlinkSync(localPath); } catch (_) {}
+            }
+        }
         console.error('Report submission error:', err);
         res.status(500).json({ error: 'Could not save the rescue report. Please try again.' });
     }
@@ -278,6 +309,26 @@ app.put('/api/ngo/profile', authRequired, roleRequired('ngo'), async (req, res) 
         console.error('Profile update error:', err);
         res.status(500).json({ error: 'Could not save profile.' });
     }
+});
+
+// Endpoint to serve images from MongoDB
+app.get('/api/image/:filename', async (req, res) => {
+  try {
+    const img = await db.getImage(req.params.filename);
+    if (img && img.data) {
+      res.set('Content-Type', img.contentType);
+      return res.send(img.data);
+    }
+    // Fallback to local file if exists
+    const localPath = path.join(uploadsDir, req.params.filename);
+    if (fs.existsSync(localPath)) {
+      return res.sendFile(localPath);
+    }
+    res.status(404).json({ error: 'Image not found' });
+  } catch (e) {
+    console.error('Image fetch error:', e);
+    res.status(500).json({ error: 'Failed to retrieve image' });
+  }
 });
 
 app.use((err, _req, res, _next) => {

@@ -197,6 +197,16 @@ const Organization = mongoose.models.Organization || mongoose.model('Organizatio
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 const Report = mongoose.models.Report || mongoose.model('Report', reportSchema);
 
+const imageSchema = new mongoose.Schema({
+    filename: { type: String, required: true, unique: true },
+    contentType: { type: String, default: 'image/jpeg' },
+    data: { type: Buffer, required: true },
+    size: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now }
+}, { timestamps: false, versionKey: false });
+
+const Image = mongoose.models.Image || mongoose.model('Image', imageSchema);
+
 let isMongoConnected = false;
 
 // Monitor connection status
@@ -324,6 +334,33 @@ async function seedInitialDataIfEmpty() {
             if (reportsToSeed && reportsToSeed.length > 0) {
                 await Report.insertMany(reportsToSeed);
                 console.log(`[MongoDB Atlas] Migrated ${reportsToSeed.length} reports into Atlas.`);
+            }
+        }
+
+        // Sync local upload images to MongoDB Atlas if Image collection is empty
+        const imageCount = await Image.countDocuments();
+        const uploadsDir = path.join(__dirname, 'uploads');
+        if (imageCount === 0 && fs.existsSync(uploadsDir)) {
+            const files = fs.readdirSync(uploadsDir);
+            let synced = 0;
+            for (const file of files) {
+                const filePath = path.join(uploadsDir, file);
+                if (fs.statSync(filePath).isFile() && !file.startsWith('.')) {
+                    try {
+                        const buffer = fs.readFileSync(filePath);
+                        const ext = path.extname(file).toLowerCase();
+                        const mime = ext === '.png' ? 'image/png' : (ext === '.webp' ? 'image/webp' : 'image/jpeg');
+                        await Image.findOneAndUpdate(
+                            { filename: file },
+                            { filename: file, contentType: mime, data: buffer, size: buffer.length, createdAt: new Date() },
+                            { upsert: true }
+                        );
+                        synced++;
+                    } catch (_) {}
+                }
+            }
+            if (synced > 0) {
+                console.log(`[MongoDB Atlas] Synced ${synced} persistent upload images to Atlas.`);
             }
         }
     } catch (err) {
@@ -574,5 +611,36 @@ module.exports = {
             }
         }
         return report;
+    },
+
+    saveImage: async (filename, contentType, buffer) => {
+        if (isMongoConnected && mongoose.connection.readyState === 1) {
+            try {
+                await Image.findOneAndUpdate(
+                    { filename },
+                    { filename, contentType, data: buffer, size: buffer.length, createdAt: new Date() },
+                    { upsert: true, new: true }
+                );
+            } catch (err) {
+                console.warn('[Database] Could not save image to MongoDB Atlas:', err.message);
+            }
+        }
+    },
+
+    getImage: async (filename) => {
+        if (isMongoConnected && mongoose.connection.readyState === 1) {
+            try {
+                const img = await Image.findOne({ filename }).lean();
+                if (img && img.data) {
+                    return {
+                        contentType: img.contentType || 'image/jpeg',
+                        data: Buffer.isBuffer(img.data) ? img.data : Buffer.from(img.data.buffer || img.data)
+                    };
+                }
+            } catch (err) {
+                console.warn('[Database] Could not fetch image from MongoDB Atlas:', err.message);
+            }
+        }
+        return null;
     }
 };
